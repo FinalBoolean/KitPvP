@@ -1,5 +1,7 @@
-package nl.cryonic.kit.abilities;
+package nl.cryonic.kit.abilities.knight;
 
+import nl.cryonic.KitPvP;
+import nl.cryonic.data.PlayerData;
 import nl.cryonic.kit.Ability;
 import nl.cryonic.utils.Cooldown;
 import org.bukkit.ChatColor;
@@ -14,19 +16,19 @@ public class BattleStrength extends Ability {
     public BattleStrength(ItemStack item) {
         super(item);
     }
-    private final Cooldown cooldown = new Cooldown();
+
 
     @EventHandler
     public void rightClick(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
+        PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(event.getPlayer().getUniqueId());
         if(isHoldingItem(event)) {
-            if(cooldown.hasCooldown(1000)) {
+            if(data.getAbilityCD().hasCooldown(10)) {
                 PotionEffect resistance = new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 1);
                 PotionEffect strength = new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 200, 1);
-                player.addPotionEffect(resistance);
-                player.addPotionEffect(strength);
+                data.getPlayer().addPotionEffect(resistance);
+                data.getPlayer().addPotionEffect(strength);
             } else {
-                player.sendMessage(ChatColor.RED + "Cooldown: " + cooldown.getSeconds());
+                data.getPlayer().sendMessage(ChatColor.RED + "Cooldown: " + data.getAbilityCD().getSeconds());
             }
         }
     }

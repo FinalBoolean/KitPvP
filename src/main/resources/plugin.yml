@@ -2,3 +2,7 @@ name: KitPvp
 author: FinalBoolean
 version: 0.1
 main: nl.cryonic.Main
+commands:
+  kit:
+    usage: /kit
+    description: Opens the kit gui
