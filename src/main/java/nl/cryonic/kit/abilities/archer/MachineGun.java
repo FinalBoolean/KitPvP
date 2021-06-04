@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -19,6 +20,7 @@ public class MachineGun extends Ability {
     }
 
 
+    @EventHandler
     public void onRightClick(PlayerInteractEvent event) {
         if(event.getAction() == Action.RIGHT_CLICK_AIR) {
 
