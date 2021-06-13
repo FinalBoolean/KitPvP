@@ -1,10 +1,11 @@
 package nl.cryonic.data;
 
+import lombok.Getter;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 import java.util.WeakHashMap;
-
+@Getter
 public class DataManager {
 
     public WeakHashMap<UUID, PlayerData> users;
@@ -12,10 +13,6 @@ public class DataManager {
     public DataManager() {
         users = new WeakHashMap<>();
 
-    }
-
-    public WeakHashMap<UUID, PlayerData> getPlayers() {
-        return users;
     }
 
     public void uninject(Player player) {
@@ -41,5 +38,4 @@ public class DataManager {
         }
         return null;
     }
-
 }

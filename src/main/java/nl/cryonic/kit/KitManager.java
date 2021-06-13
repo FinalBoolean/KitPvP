@@ -21,6 +21,7 @@ public class KitManager {
 
     public KitManager() {
         loadKnight();
+        loadArcher();
     }
 
     public void loadKit(Kit kit) {

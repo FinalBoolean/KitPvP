@@ -43,7 +43,6 @@ public class MachineGun extends Ability {
                     player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 1, 1);
                     arrow.setCritical(true);
                     arrow.setCustomNameVisible(false);
-
                 }
             }
         }
