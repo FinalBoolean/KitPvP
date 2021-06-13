@@ -18,10 +18,14 @@ public class PlayerData {
     private Player player;
     private Kit kit, lastKit;
 
+    private int kills, level;
+    private double xp;
+
     private Cooldown abilityCD = new Cooldown();
 
     public PlayerData(Player p) {
         player = p;
         uuid = p.getUniqueId();
     }
+
 }

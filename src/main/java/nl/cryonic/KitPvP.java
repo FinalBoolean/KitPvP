@@ -5,6 +5,7 @@ import nl.cryonic.command.KitCommand;
 import nl.cryonic.data.DataManager;
 import nl.cryonic.gui.KitGui;
 import nl.cryonic.kit.KitManager;
+import nl.cryonic.listener.DataListener;
 
 @Getter
 public enum KitPvP {
@@ -39,7 +40,10 @@ public enum KitPvP {
 
     public void handleBukkit() {
         plugin.getPluginLoader().createRegisteredListeners(new KitGui(), plugin);
+        plugin.getPluginLoader().createRegisteredListeners(new DataListener(), plugin);
         plugin.getCommand("kit").setExecutor(new KitCommand());
     }
+
+
 
 }

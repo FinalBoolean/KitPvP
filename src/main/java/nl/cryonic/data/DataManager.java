@@ -18,7 +18,7 @@ public class DataManager {
         return users;
     }
 
-    public void removePlayer(Player player) {
+    public void uninject(Player player) {
 
         PlayerData duelUser = new PlayerData(player);
 
@@ -26,7 +26,7 @@ public class DataManager {
 
     }
 
-    public void addPlayer(Player player) {
+    public void inject(Player player) {
 
         PlayerData duelUser = new PlayerData(player);
         users.put(player.getUniqueId(), duelUser);
