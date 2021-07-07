@@ -13,17 +13,14 @@ public class Kit {
     private final ItemStack[] armorContents;
     private final Material icon;
     private final int level;
-    private final ArrayList<Ability> abilities;
 
-    public Kit(String name, Material icon, int level, ItemStack[] itemContents, ItemStack[] armorContents, ArrayList<Ability> abilities, String... lore) {
+    public Kit(String name, Material icon, int level, ItemStack[] itemContents, ItemStack[] armorContents, String... lore) {
         this.name = name;
         this.itemContents = itemContents;
         this.icon = icon;
         this.armorContents = armorContents;
         this.lore = lore;
         this.level = level;
-        this.abilities = abilities;
-
     }
 
 

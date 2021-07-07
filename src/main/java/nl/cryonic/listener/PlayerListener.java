@@ -4,6 +4,8 @@ import nl.cryonic.KitPvP;
 import nl.cryonic.config.Config;
 import nl.cryonic.data.PlayerData;
 import nl.cryonic.gui.KitGui;
+import nl.cryonic.kit.Kit;
+import nl.cryonic.utils.ColorUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -11,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class PlayerListener implements Listener {
@@ -38,6 +41,7 @@ public class PlayerListener implements Listener {
                 killerUser.setXp(0);
                 killerUser.setLevel(killerUser.getLevel() + 1);
                 killer.playSound(killer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+                killerUser.setNeededXp((int) (2 * killerUser.getLevel() + Math.ceil(Math.random() * killerUser.getLevel())));
             } else {
                 killer.playSound(killer.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1,1);
             }
@@ -59,6 +63,28 @@ public class PlayerListener implements Listener {
         KitGui kitGui = new KitGui(data);
         kitGui.openGui(player);
         data.giveKit(data.getLastKit());
+    }
+
+    @EventHandler
+    public void onClick(InventoryClickEvent e) {
+        Player player = (Player) e.getWhoClicked();
+        PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
+        if (e.getView().getTitle().equalsIgnoreCase("Kit Selector")) {
+            for (Kit kit : KitPvP.INSTANCE.getKitManager().getKits()) {
+                if (e.getInventory().getItem(e.getSlot()).getItemMeta().getDisplayName().equalsIgnoreCase(kit.getName())) {
+                    if(kit.getLevel() <= data.getLevel()) {
+                        data.giveKit(kit);
+                        data.getPlayer().sendMessage(ColorUtil.translate(Config.RECEIVED_KIT));
+                        data.getPlayer().closeInventory();
+                    } else {
+                        data.getPlayer().sendMessage(ChatColor.RED + "You need to be level " + kit.getLevel() + " to use that kit!");
+                    }
+
+                }
+            }
+            e.setCancelled(true);
+        }
+
     }
 
 }

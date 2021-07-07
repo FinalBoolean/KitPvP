@@ -5,6 +5,7 @@ import nl.cryonic.data.PlayerData;
 import nl.cryonic.kit.Ability;
 import nl.cryonic.utils.Cooldown;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -17,12 +18,12 @@ public class BattleStrength extends Ability {
         super(item);
     }
 
-
     @EventHandler
     public void rightClick(PlayerInteractEvent event) {
         PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(event.getPlayer().getUniqueId());
         if(isHoldingItem(event)) {
-            if(data.getAbilityCD().hasCooldown(10)) {
+            if(data.getAbilityCD().hasCooldown(20)) {
+                data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
                 PotionEffect resistance = new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 1);
                 PotionEffect strength = new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 200, 1);
                 data.getPlayer().addPotionEffect(resistance);

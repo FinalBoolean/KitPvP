@@ -36,9 +36,8 @@ public enum KitPvP {
         Config.INSTANCE.loadConfig();
         this.dataManager = new DataManager();
         this.kitManager = new KitManager();
-        scoreboard(plugin);
         handleBukkit(plugin);
-
+        scoreboard(plugin);
     }
 
     public void scoreboard(Main plugin) {
@@ -46,11 +45,9 @@ public enum KitPvP {
 
             @Override
             public void run() {
-
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     updateScoreboard(player);
                 }
-
             }
 
         }.runTaskTimer(plugin, 20L, 20L);
@@ -70,9 +67,9 @@ public enum KitPvP {
     }
 
     public void handleBukkit(Main plugin) {
-        plugin.getPluginLoader().createRegisteredListeners(new KitGui(), plugin);
-        plugin.getPluginLoader().createRegisteredListeners(new DataListener(), plugin);
-        plugin.getPluginLoader().createRegisteredListeners(new PlayerListener(), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new KitGui(), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new DataListener(), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new PlayerListener(), plugin);
         plugin.getCommand("kit").setExecutor(new KitCommand());
     }
 

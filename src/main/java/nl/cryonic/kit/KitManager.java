@@ -25,20 +25,16 @@ public class KitManager {
     }
 
     public void loadKit(Kit kit) {
-        kit.getAbilities().forEach(ability -> {
-            KitPvP.INSTANCE.getPlugin().getPluginLoader().createRegisteredListeners(ability, KitPvP.INSTANCE.getPlugin());
-        });
         kits.add(kit);
     }
 
     public void loadKnight() {
         List<ItemStack> items = new ArrayList<>();
-        ArrayList<Ability> abilities = new ArrayList<>();
         ItemStack SWORD = createItem(Material.IRON_SWORD, "&aKnight's Sword", "&aDecent sword for a fight.");
         items.add(SWORD);
         ItemStack ability = createItem(Material.BLAZE_POWDER, "&aBattle Strength", "&aGives resistance and strength for 5 seconds.");
         items.add(ability);
-        abilities.add(new BattleStrength(ability));
+        KitPvP.INSTANCE.getPlugin().getServer().getPluginManager().registerEvents(new BattleStrength(ability), KitPvP.INSTANCE.getPlugin());
         List<ItemStack> armor = new ArrayList<>();
         armor.add(createItem(Material.CHAINMAIL_BOOTS, "&aChain Boots"));
         armor.add(createItem(Material.CHAINMAIL_LEGGINGS, "&aChain Leggings"));
@@ -48,7 +44,7 @@ public class KitManager {
         items.toArray(convertitems);
         ItemStack[] convertarmor = new ItemStack[armor.size()];
         armor.toArray(convertarmor);
-        loadKit(new Kit(ColorUtil.translate("&aKnight"), Material.IRON_SWORD, 0, convertitems, convertarmor,abilities, ColorUtil.translate("&aSimple default kit")));
+        loadKit(new Kit(ColorUtil.translate("&aKnight"), Material.IRON_SWORD, 0, convertitems, convertarmor, ColorUtil.translate("&aSimple default kit")));
 
     }
 
@@ -65,7 +61,7 @@ public class KitManager {
         items.add(arrow);
         abilities.add(new MachineGun(ability));
 
-
+        KitPvP.INSTANCE.getPlugin().getServer().getPluginManager().registerEvents(new MachineGun(ability), KitPvP.INSTANCE.getPlugin());
 
         List<ItemStack> armor = new ArrayList<>();
         armor.add(createItem(Material.CHAINMAIL_BOOTS, "&aChain Boots"));
@@ -77,7 +73,7 @@ public class KitManager {
         items.toArray(convertitems);
         ItemStack[] convertarmor = new ItemStack[armor.size()];
         armor.toArray(convertarmor);
-        kits.add(new Kit(ColorUtil.translate("&aArcher"), Material.BOW, 0, convertitems, convertarmor, abilities, ColorUtil.translate("&aBecome a archer")));
+        kits.add(new Kit(ColorUtil.translate("&aArcher"), Material.BOW, 0, convertitems, convertarmor, ColorUtil.translate("&aBecome a archer")));
     }
 
 

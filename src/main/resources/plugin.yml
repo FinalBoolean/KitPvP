@@ -1,8 +1,7 @@
 name: KitPvp
-author: FinalBoolean
+author: FinalBoolean, IDurpy, Eths
 version: 0.1
 main: nl.cryonic.Main
 commands:
   kit:
-    usage: /kit
     description: Opens the kit gui

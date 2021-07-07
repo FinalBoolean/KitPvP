@@ -15,8 +15,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import javax.swing.plaf.ColorUIResource;
 import java.util.Arrays;
 
 public class KitGui implements Listener {
@@ -56,24 +54,6 @@ public class KitGui implements Listener {
         entity.openInventory(inv);
     }
 
-    @EventHandler
-    public void onClick(InventoryClickEvent e) {
-        if (e.getView().getTitle().equalsIgnoreCase("Kit Selector")) {
-            for (Kit kit : KitPvP.INSTANCE.getKitManager().getKits()) {
-                if (e.getInventory().getItem(e.getSlot()).getItemMeta().getDisplayName().equalsIgnoreCase(kit.getName())) {
-                    if(kit.getLevel() <= data.getLevel()) {
-                        data.giveKit(kit);
-                        data.getPlayer().sendMessage(ColorUtil.translate(Config.RECEIVED_KIT));
-                        data.getPlayer().closeInventory();
-                    } else {
-                        data.getPlayer().sendMessage(ChatColor.RED + "You need to be level " + kit.getLevel() + " to use that kit!");
-                    }
-                }
-            }
-            e.setCancelled(true);
-        }
-
-    }
 
     public void loadKits() {
         for (Kit kit : KitPvP.INSTANCE.getKitManager().getKits()) {
