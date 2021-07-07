@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 @Getter
-public enum KitPvP  {
+public enum KitPvP {
     INSTANCE;
 
     private KitManager kitManager;
@@ -34,12 +34,10 @@ public enum KitPvP  {
      */
     public void onEnable(Main plugin) {
         Config.INSTANCE.loadConfig();
-        handleBukkit();
         this.dataManager = new DataManager();
         this.kitManager = new KitManager();
-
         scoreboard(plugin);
-
+        handleBukkit(plugin);
 
     }
 
@@ -67,10 +65,11 @@ public enum KitPvP  {
      * Called when the plugin is disabled
      */
     public void onDisable(Main plugin) {
+        Bukkit.getOnlinePlayers().forEach(player -> dataManager.uninject(player));
 
     }
 
-    public void handleBukkit() {
+    public void handleBukkit(Main plugin) {
         plugin.getPluginLoader().createRegisteredListeners(new KitGui(), plugin);
         plugin.getPluginLoader().createRegisteredListeners(new DataListener(), plugin);
         plugin.getPluginLoader().createRegisteredListeners(new PlayerListener(), plugin);
@@ -102,8 +101,6 @@ public enum KitPvP  {
             }
         }
     }
-
-
 
 
 }

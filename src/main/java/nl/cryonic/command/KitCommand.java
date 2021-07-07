@@ -14,10 +14,8 @@ public class KitCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
         if (sender instanceof Player) {
             Player player = ((Player) sender).getPlayer();
-
-            assert player != null;
             PlayerData playerData = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
-            if(playerData.getKit() != null) {
+            if(playerData.getKit() == null) {
                 KitGui kitGui = new KitGui(playerData);
                 kitGui.openGui(player);
             } else {

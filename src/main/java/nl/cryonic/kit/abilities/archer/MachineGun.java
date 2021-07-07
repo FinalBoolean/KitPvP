@@ -23,7 +23,6 @@ public class MachineGun extends Ability {
     @EventHandler
     public void onRightClick(PlayerInteractEvent event) {
         if(event.getAction() == Action.RIGHT_CLICK_AIR) {
-
             PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(event.getPlayer().getUniqueId());
             if(isHoldingItem(event)) {
                 if (data.getAbilityCD().hasCooldown(30)) {
