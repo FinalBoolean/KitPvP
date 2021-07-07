@@ -31,6 +31,13 @@ public class PlayerData {
         uuid = p.getUniqueId();
     }
 
+    public void giveKit(Kit kit) {
+        player.getInventory().setContents(kit.getItemContents());
+        player.getInventory().setArmorContents(kit.getArmorContents());
+        player.updateInventory();
+        setLastKit(kit);
+    }
+
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void loadData() {
         final File dir = new File(KitPvP.INSTANCE.getPlugin().getDataFolder() + File.separator + "Data");
