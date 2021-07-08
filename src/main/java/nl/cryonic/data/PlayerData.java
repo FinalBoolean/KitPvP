@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import nl.cryonic.KitPvP;
+import nl.cryonic.data.enums.State;
 import nl.cryonic.kit.Kit;
 import nl.cryonic.utils.Cooldown;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -21,7 +22,7 @@ public class PlayerData {
     private Player player;
     private Kit kit, lastKit;
 
-    private int kills, level, killStreak;
+    private int kills, deaths, level, killStreak, maxKillStreak, credits;
     private double xp, neededXp;
 
     private Cooldown abilityCD = new Cooldown();

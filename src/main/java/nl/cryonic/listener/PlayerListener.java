@@ -14,9 +14,23 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class PlayerListener implements Listener {
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        player.sendMessage(ColorUtil.translate("&7&m-----------------------------------"));
+        player.sendMessage(ColorUtil.translate("       &fWelcome to &6Strafed.US&f!"));
+        player.sendMessage(ColorUtil.translate(""));
+        player.sendMessage(ColorUtil.translate("&7» &6Server IP: &fstrafed.us"));
+        player.sendMessage(ColorUtil.translate("&7» &6Website: &fwww.strafed.us"));
+        player.sendMessage(ColorUtil.translate("&7» &6Store: &fstore.strafed.us"));
+        player.sendMessage(ColorUtil.translate("&7» &6Discord: &fdiscord.strafed.us"));
+        player.sendMessage(ColorUtil.translate("&7&m-----------------------------------"));
+    }
 
     @EventHandler
     public void onKill(PlayerDeathEvent event) {
@@ -29,6 +43,9 @@ public class PlayerListener implements Listener {
             killedUser.setKillStreak(0);
             //Kill rewards
             killerUser.setKillStreak(killerUser.getKillStreak() + 1);
+            if (killerUser.getKillStreak() > killerUser.getMaxKillStreak()) {
+                killerUser.setMaxKillStreak(killerUser.getMaxKillStreak());
+            }
             killerUser.setKills(killerUser.getKills() + 1);
             double xpAdd = (int) Math.abs(Math.ceil(Math.random() * killerUser.getLevel() - Math.ceil(Math.random() * killerUser.getLevel()))) + 1;
             killerUser.setXp(killerUser.getXp() + xpAdd);
@@ -84,7 +101,6 @@ public class PlayerListener implements Listener {
             }
             e.setCancelled(true);
         }
-
     }
 
 }

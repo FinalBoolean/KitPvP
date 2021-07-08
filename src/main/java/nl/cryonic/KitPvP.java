@@ -9,10 +9,11 @@ import nl.cryonic.gui.KitGui;
 import nl.cryonic.kit.KitManager;
 import nl.cryonic.listener.DataListener;
 import nl.cryonic.listener.PlayerListener;
+import nl.cryonic.managers.ScoreboardManager;
 import nl.cryonic.utils.ScoreHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.Score;
 
 @Getter
 public enum KitPvP {
@@ -20,6 +21,7 @@ public enum KitPvP {
 
     private KitManager kitManager;
     private DataManager dataManager;
+    private ScoreboardManager scoreboardManager;
     private Main plugin;
 
     /**
@@ -36,25 +38,16 @@ public enum KitPvP {
         Config.INSTANCE.loadConfig();
         this.dataManager = new DataManager();
         this.kitManager = new KitManager();
-        handleBukkit(plugin);
+        this.scoreboardManager = new ScoreboardManager();
         scoreboard(plugin);
+        handleBukkit(plugin);
+
     }
 
     public void scoreboard(Main plugin) {
-        new BukkitRunnable() {
-
-            @Override
-            public void run() {
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    updateScoreboard(player);
-                }
-            }
-
-        }.runTaskTimer(plugin, 20L, 20L);
 
         for (Player p : Bukkit.getOnlinePlayers()) {
             dataManager.inject(p);
-            createScoreboard(p);
         }
     }
 
@@ -63,7 +56,6 @@ public enum KitPvP {
      */
     public void onDisable(Main plugin) {
         Bukkit.getOnlinePlayers().forEach(player -> dataManager.uninject(player));
-
     }
 
     public void handleBukkit(Main plugin) {
