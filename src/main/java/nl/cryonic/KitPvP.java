@@ -10,7 +10,6 @@ import nl.cryonic.kit.KitManager;
 import nl.cryonic.listener.DataListener;
 import nl.cryonic.listener.PlayerListener;
 import nl.cryonic.managers.ScoreboardManager;
-import nl.cryonic.utils.ScoreHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Score;
@@ -63,32 +62,6 @@ public enum KitPvP {
         plugin.getServer().getPluginManager().registerEvents(new DataListener(), plugin);
         plugin.getServer().getPluginManager().registerEvents(new PlayerListener(), plugin);
         plugin.getCommand("kit").setExecutor(new KitCommand());
-    }
-
-    public void createScoreboard(Player player) {
-        ScoreHelper helper = ScoreHelper.createScore(player);
-        PlayerData pd = dataManager.getPlayer(player.getUniqueId());
-
-        helper.setTitle("&4&lWar&8&lAC");
-        helper.setSlot(8, "&7&m--------------------------------");
-        helper.setSlot(7, "&aPlayer&f: " + player.getName());
-        helper.setSlot(6, "&aLevel&f: " + pd.getLevel());
-        helper.setSlot(5, "&aProgress&f: " + pd.getXp() + "/" + pd.getNeededXp());
-        helper.setSlot(4, "&aKill Streak&f: " + pd.getKillStreak());
-        helper.setSlot(1, "&7&m--------------------------------");
-    }
-
-    public void updateScoreboard(Player player) {
-        if (ScoreHelper.hasScore(player)) {
-            ScoreHelper helper = ScoreHelper.getByPlayer(player);
-            PlayerData pd = dataManager.getPlayer(player.getUniqueId());
-            if (pd != null) {
-                helper.setSlot(6, "&aLevel&f: " + pd.getLevel());
-                helper.setSlot(5, "&aProgress&f: " + pd.getXp() + "/" + pd.getNeededXp());
-                helper.setSlot(4, "&aKill Streak&f: " + pd.getKillStreak());
-
-            }
-        }
     }
 
 
