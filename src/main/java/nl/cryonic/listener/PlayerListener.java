@@ -63,7 +63,7 @@ public class PlayerListener implements Listener {
                 killer.playSound(killer.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1,1);
             }
 
-            event.setDeathMessage(Config.KILL_MESSAGE.replace("%killer%", killer.getName()).replace("%victim%", killed.getName()));
+            event.setDeathMessage(ColorUtil.translate(Config.KILL_MESSAGE.replace("%killer%", killer.getName()).replace("%victim%", killed.getName())));
         }
     }
 

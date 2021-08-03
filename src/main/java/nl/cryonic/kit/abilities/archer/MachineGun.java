@@ -1,5 +1,6 @@
 package nl.cryonic.kit.abilities.archer;
 
+import com.sun.org.apache.bcel.internal.generic.DADD;
 import nl.cryonic.KitPvP;
 import nl.cryonic.data.PlayerData;
 import nl.cryonic.kit.Ability;
@@ -12,6 +13,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Objects;
 
 public class MachineGun extends Ability {
     public MachineGun(ItemStack item) {
@@ -26,6 +29,8 @@ public class MachineGun extends Ability {
             if (data.getAbilityCD().hasCooldown(30)) {
                 data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
                 data.getPlayer().sendMessage(ChatColor.RED + "Machine gun initialized");
+            } else {
+                data.getPlayer().sendMessage(ChatColor.RED + "Cooldown: " + data.getAbilityCD().getSeconds());
             }
         }
         if (data.getPlayer().getInventory().getItemInMainHand().getType() == Material.BOW) {
@@ -46,7 +51,7 @@ public class MachineGun extends Ability {
 
     @EventHandler
     public void onArrowLand(ProjectileHitEvent event){
-        if(event.getEntity().getCustomName().equalsIgnoreCase("crazy arrow bro")) {
+        if(Objects.requireNonNull(event.getEntity().getCustomName()).equalsIgnoreCase("crazy arrow bro")) {
             event.getEntity().remove();
         }
     }
