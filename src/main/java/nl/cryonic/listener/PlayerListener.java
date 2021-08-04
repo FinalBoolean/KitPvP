@@ -41,6 +41,7 @@ public class PlayerListener implements Listener {
             PlayerData killerUser = KitPvP.INSTANCE.getDataManager().getPlayer(killer.getUniqueId());
 
             killedUser.setKillStreak(0);
+            killedUser.setDeaths(killedUser.getDeaths() + 1);
             //Kill rewards
             killerUser.setKillStreak(killerUser.getKillStreak() + 1);
             if (killerUser.getKillStreak() > killerUser.getMaxKillStreak()) {
@@ -88,10 +89,11 @@ public class PlayerListener implements Listener {
         PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
         if (e.getView().getTitle().equalsIgnoreCase("Kit Selector")) {
             for (Kit kit : KitPvP.INSTANCE.getKitManager().getKits()) {
+
                 if (e.getInventory().getItem(e.getSlot()).getItemMeta().getDisplayName().equalsIgnoreCase(kit.getName())) {
                     if(kit.getLevel() <= data.getLevel()) {
                         data.giveKit(kit);
-                        data.getPlayer().sendMessage(ColorUtil.translate(Config.RECEIVED_KIT));
+                        data.getPlayer().sendMessage(ColorUtil.translate(Config.RECEIVED_KIT.replace("%kit%", kit.getName())));
                         data.getPlayer().closeInventory();
                     } else {
                         data.getPlayer().sendMessage(ChatColor.RED + "You need to be level " + kit.getLevel() + " to use that kit!");

@@ -1,6 +1,5 @@
 package nl.cryonic.kit.abilities.archer;
 
-import com.sun.org.apache.bcel.internal.generic.DADD;
 import nl.cryonic.KitPvP;
 import nl.cryonic.data.PlayerData;
 import nl.cryonic.kit.Ability;
@@ -13,8 +12,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Objects;
 
 public class MachineGun extends Ability {
     public MachineGun(ItemStack item) {
@@ -50,9 +47,11 @@ public class MachineGun extends Ability {
     }
 
     @EventHandler
-    public void onArrowLand(ProjectileHitEvent event){
-        if(Objects.requireNonNull(event.getEntity().getCustomName()).equalsIgnoreCase("crazy arrow bro")) {
-            event.getEntity().remove();
+    public void onArrowLand(ProjectileHitEvent event) {
+        if (event.getEntity().getCustomName() != null) {
+            if (event.getEntity().getCustomName().equalsIgnoreCase("crazy arrow bro")) {
+                event.getEntity().remove();
+            }
         }
     }
 }

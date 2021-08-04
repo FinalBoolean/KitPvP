@@ -5,3 +5,4 @@ main: nl.cryonic.Main
 commands:
   kit:
     description: Opens the kit gui
+    aliases: [kits]

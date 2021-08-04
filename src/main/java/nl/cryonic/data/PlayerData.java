@@ -60,6 +60,7 @@ public class PlayerData {
 
             pd.setXp(load.getInt("xp"));
             pd.setKills(load.getInt("kills"));
+            pd.setDeaths(load.getInt("deaths"));
             pd.setKillStreak(load.getInt("killStreak"));
             pd.setLevel(load.getInt("level"));
             pd.setNeededXp(load.getInt("neededXp"));
@@ -83,6 +84,7 @@ public class PlayerData {
         final YamlConfiguration plda = YamlConfiguration.loadConfiguration(player);
         PlayerData pd = this;
         plda.set("kills", pd.getKills());
+        plda.set("deaths", pd.getDeaths());
         plda.set("killStreak", pd.getKillStreak());
         plda.set("level", pd.getLevel());
         plda.set("xp", pd.getXp());
