@@ -13,3 +13,6 @@ commands:
   vanish:
     description: Allows staff to go into vanish
     aliases: [v, sv]
+  staffchat:
+    description: Allows staff to use staff chat
+    aliases: [sc]
