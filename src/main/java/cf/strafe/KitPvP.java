@@ -4,6 +4,7 @@ import cf.strafe.command.*;
 import cf.strafe.data.DataManager;
 import cf.strafe.kit.KitManager;
 import cf.strafe.listener.DataListener;
+import cf.strafe.managers.BroadcastManager;
 import lombok.Getter;
 import cf.strafe.config.Config;
 import cf.strafe.gui.KitGui;
@@ -17,6 +18,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -27,6 +29,7 @@ public enum KitPvP {
 
     private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
     private KitManager kitManager;
+    private BroadcastManager broadcastManager;
     private DataManager dataManager;
     private ScoreboardManager scoreboardManager;
     private Scoreboard teamManager;
@@ -36,6 +39,11 @@ public enum KitPvP {
      * Called when the plugin is loaded
      */
     public void onLoad(Main plugin) {
+        final File f = new File(plugin.getDataFolder(), "config.yml");
+        if (!f.exists()) {
+            plugin.saveResource("config.yml", true);
+
+        }
         this.plugin = plugin;
     }
 
@@ -47,12 +55,15 @@ public enum KitPvP {
         this.dataManager = new DataManager();
         this.kitManager = new KitManager();
         this.scoreboardManager = new ScoreboardManager();
+        this.broadcastManager = new BroadcastManager();
         scoreboard(plugin);
         handleBukkit(plugin);
         Bukkit.getOnlinePlayers().forEach(player -> dataManager.inject(player));
         teamManager = Bukkit.getScoreboardManager().getMainScoreboard();
         registerHealthBar();
         registerNameTag();
+
+
 
 
     }

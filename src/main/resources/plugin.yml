@@ -1,7 +1,7 @@
 name: Kits
 author: FinalBoolean, IDurpy, Eths
 version: 0.1
-main: nl.cryonic.Main
+main: cf.strafe.Main
 commands:
   kit:
     description: Opens the kit gui

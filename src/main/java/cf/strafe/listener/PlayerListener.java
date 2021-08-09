@@ -41,8 +41,15 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
 
+        PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
+        if( !event.getPlayer().hasPermission("kitpvp.admin")) {
+            if (!data.getChatCD().hasCooldown(Config.CHAT_CD)) {
+                event.setCancelled(true);
+            } else {
+                player.sendMessage(ColorUtil.translate(String.format("&cThere is a &4%s &csecond chat delay!", data.getChatCD().getSeconds())));
+            }
+        }
         if(data.isStaffchat()) {
             event.setCancelled(true);
             Bukkit.broadcast(ColorUtil.translate( "&6[StaffChat] &7" + player.getName() + "»&e " + event.getMessage()), "kitpvp.staff");

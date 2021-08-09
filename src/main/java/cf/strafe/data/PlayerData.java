@@ -31,6 +31,7 @@ public class PlayerData {
     public int recallTask, countDown;
 
     private Cooldown abilityCD = new Cooldown();
+    private Cooldown chatCD = new Cooldown();
 
     public PlayerData(Player p) {
         player = p;

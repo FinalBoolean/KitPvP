@@ -12,7 +12,7 @@ public class ReportCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            if (args.length > 0) {
+            if (args.length > 1) {
 
 
                 if (Bukkit.getPlayer(args[0]) != null) {

@@ -1,2 +1,25 @@
 killMessage: '&b&lStrafe&e&lKits&7» &7%killer% slashed %victim% into pieces.'
 receiveKit: '&b&lStrafe&e&lKits&7» You have received %kit%'
+chat-delay: 1
+broadcast-delay: 6000
+announcements:
+  announcement1:
+    - '&r'
+    - '&r'
+    - '[center]&c&lCheck our discord out!'
+    - '[center]&7You can get the link by doing /discord'
+    - '&r'
+    - '&r'
+  announcement2:
+    - '&r'
+    - '&r'
+    - '[center]&4&lExtreme/excessive camping is punishable'
+    - '&r'
+    - '&r'
+  announcement3:
+    - '&r'
+    - '&r'
+    - '[center]&6&lSee a hacker?'
+    - '[center]&3&lDo /report [player] [reason]'
+    - '&r'
+    - '&r'
