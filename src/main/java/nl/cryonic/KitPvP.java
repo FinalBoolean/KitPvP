@@ -1,26 +1,38 @@
 package nl.cryonic;
 
 import lombok.Getter;
+import nl.cryonic.command.DiscordCommand;
 import nl.cryonic.command.KitCommand;
+import nl.cryonic.command.ReportCommand;
+import nl.cryonic.command.VanishCommand;
 import nl.cryonic.config.Config;
 import nl.cryonic.data.DataManager;
-import nl.cryonic.data.PlayerData;
 import nl.cryonic.gui.KitGui;
 import nl.cryonic.kit.KitManager;
 import nl.cryonic.listener.DataListener;
 import nl.cryonic.listener.PlayerListener;
 import nl.cryonic.managers.ScoreboardManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 @Getter
 public enum KitPvP {
     INSTANCE;
 
+
+    private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
     private KitManager kitManager;
     private DataManager dataManager;
     private ScoreboardManager scoreboardManager;
+    private Scoreboard teamManager;
     private Main plugin;
 
     /**
@@ -40,7 +52,29 @@ public enum KitPvP {
         this.scoreboardManager = new ScoreboardManager();
         scoreboard(plugin);
         handleBukkit(plugin);
+        Bukkit.getOnlinePlayers().forEach(player -> dataManager.inject(player));
+        teamManager = Bukkit.getScoreboardManager().getMainScoreboard();
+        registerHealthBar();
+        registerNameTag();
 
+
+    }
+
+    public void registerNameTag() {
+        if(teamManager.getTeam("vanish") != null) {
+            teamManager.getTeam("vanish").unregister();
+        }
+        Team t = teamManager.registerNewTeam("vanish");
+        t.setPrefix(ChatColor.GREEN + "[V] ");
+    }
+
+    public void registerHealthBar() {
+        if(teamManager.getObjective("health") != null) {
+            teamManager.getObjective("health").unregister();
+        }
+        Objective o = teamManager.registerNewObjective("health", "health");
+        o.setDisplayName(ChatColor.RED + "❤");
+        o.setDisplaySlot(DisplaySlot.BELOW_NAME);
     }
 
     public void scoreboard(Main plugin) {
@@ -62,6 +96,9 @@ public enum KitPvP {
         plugin.getServer().getPluginManager().registerEvents(new DataListener(), plugin);
         plugin.getServer().getPluginManager().registerEvents(new PlayerListener(), plugin);
         plugin.getCommand("kit").setExecutor(new KitCommand());
+        plugin.getCommand("discord").setExecutor(new DiscordCommand());
+        plugin.getCommand("report").setExecutor(new ReportCommand());
+        plugin.getCommand("vanish").setExecutor(new VanishCommand());
     }
 
 

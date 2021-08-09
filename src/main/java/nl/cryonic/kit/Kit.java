@@ -3,8 +3,6 @@ package nl.cryonic.kit;
 import lombok.*;
 import org.bukkit.*;
 import org.bukkit.inventory.*;
-
-import java.util.ArrayList;
 @Getter
 public class Kit {
     private final String name;

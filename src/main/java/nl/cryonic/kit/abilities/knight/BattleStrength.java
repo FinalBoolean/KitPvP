@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -20,16 +21,19 @@ public class BattleStrength extends Ability {
 
     @EventHandler
     public void rightClick(PlayerInteractEvent event) {
-        PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(event.getPlayer().getUniqueId());
-        if(isHoldingItem(event)) {
-            if(data.getAbilityCD().hasCooldown(20)) {
-                data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
-                PotionEffect resistance = new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 1);
-                PotionEffect strength = new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 200, 1);
-                data.getPlayer().addPotionEffect(resistance);
-                data.getPlayer().addPotionEffect(strength);
-            } else {
-                data.getPlayer().sendMessage(ChatColor.RED + "Cooldown: " + data.getAbilityCD().getSeconds());
+        if(event.getAction() == Action.RIGHT_CLICK_AIR) {
+            PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(event.getPlayer().getUniqueId());
+            if (isHoldingItem(event)) {
+                if (data.getAbilityCD().hasCooldown(20)) {
+                    data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
+                    PotionEffect resistance = new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 1);
+                    PotionEffect strength = new PotionEffect(PotionEffectType.SPEED, 200, 1);
+                    data.getPlayer().addPotionEffect(resistance);
+                    data.getPlayer().addPotionEffect(strength);
+                    data.getPlayer().sendMessage(ChatColor.GREEN + "(!) You used battle strength!");
+                } else {
+                    data.getPlayer().sendMessage(ChatColor.RED + "Cooldown: " + data.getAbilityCD().getSeconds());
+                }
             }
         }
     }

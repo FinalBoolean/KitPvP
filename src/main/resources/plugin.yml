@@ -6,3 +6,10 @@ commands:
   kit:
     description: Opens the kit gui
     aliases: [kits]
+  report:
+    description: Reports a player
+  discord:
+    description: Discord command
+  vanish:
+    description: Allows staff to go into vanish
+    aliases: [v, sv]

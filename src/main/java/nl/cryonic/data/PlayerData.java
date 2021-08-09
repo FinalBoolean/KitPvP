@@ -4,9 +4,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import nl.cryonic.KitPvP;
-import nl.cryonic.data.enums.State;
 import nl.cryonic.kit.Kit;
 import nl.cryonic.utils.Cooldown;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -24,6 +26,9 @@ public class PlayerData {
 
     private int kills, deaths, level, killStreak, maxKillStreak, credits;
     private double xp, neededXp;
+    private boolean vanished, staffchat;
+    private Location recallLocation;
+    public int recallTask, countDown;
 
     private Cooldown abilityCD = new Cooldown();
 
@@ -32,11 +37,33 @@ public class PlayerData {
         uuid = p.getUniqueId();
     }
 
+    public void vanish(PlayerData data) {
+        Player player = data.getPlayer();
+
+        KitPvP.INSTANCE.getTeamManager().getTeam("vanish").addPlayer(player);
+        for (Player players : Bukkit.getOnlinePlayers()) {
+            if (!players.hasPermission("kitpvp.staff")) {
+                players.hidePlayer(player);
+            }
+        }
+
+    }
+
+    public void unvanish(PlayerData data) {
+        Player player = data.getPlayer();
+        KitPvP.INSTANCE.getTeamManager().getTeam("vanish").removePlayer(player);
+        for (Player players : Bukkit.getOnlinePlayers()) {
+            players.showPlayer(player);
+        }
+
+    }
+
     public void giveKit(Kit kit) {
         player.getInventory().setContents(kit.getItemContents());
         player.getInventory().setArmorContents(kit.getArmorContents());
         player.updateInventory();
         setLastKit(kit);
+        player.playSound(player.getLocation(), Sound.ENTITY_HORSE_SADDLE, 1, 1);
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
