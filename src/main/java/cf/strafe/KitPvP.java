@@ -2,6 +2,7 @@ package cf.strafe;
 
 import cf.strafe.command.*;
 import cf.strafe.data.DataManager;
+import cf.strafe.event.EventManager;
 import cf.strafe.kit.KitManager;
 import cf.strafe.listener.DataListener;
 import cf.strafe.managers.BroadcastManager;
@@ -33,6 +34,7 @@ public enum KitPvP {
     private DataManager dataManager;
     private ScoreboardManager scoreboardManager;
     private Scoreboard teamManager;
+    private EventManager eventManager;
     private Main plugin;
 
     /**
@@ -56,6 +58,7 @@ public enum KitPvP {
         this.kitManager = new KitManager();
         this.scoreboardManager = new ScoreboardManager();
         this.broadcastManager = new BroadcastManager();
+        this.eventManager = new EventManager();
         scoreboard(plugin);
         handleBukkit(plugin);
         Bukkit.getOnlinePlayers().forEach(player -> dataManager.inject(player));
