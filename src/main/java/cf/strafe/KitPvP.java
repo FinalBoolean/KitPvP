@@ -108,6 +108,8 @@ public enum KitPvP {
         plugin.getCommand("report").setExecutor(new ReportCommand());
         plugin.getCommand("vanish").setExecutor(new VanishCommand());
         plugin.getCommand("staffchat").setExecutor(new StaffChatCommand());
+        plugin.getCommand("givelevel").setExecutor(new GiveLevelCommand());
+        plugin.getCommand("stats").setExecutor(new StatsCommand());
     }
 
 

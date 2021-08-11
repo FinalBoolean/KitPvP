@@ -16,3 +16,8 @@ commands:
   staffchat:
     description: Allows staff to use staff chat
     aliases: [sc]
+  givelevel:
+    description: Allows admins to set levels
+    aliases: [gl]
+  stats:
+    description: Allows the player to see a players stats

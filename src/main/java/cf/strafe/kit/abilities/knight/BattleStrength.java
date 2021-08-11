@@ -20,11 +20,11 @@ public class BattleStrength extends Ability {
     @EventHandler
     public void rightClick(PlayerInteractEvent event) {
         if(event.getAction() == Action.RIGHT_CLICK_AIR) {
-            PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(event.getPlayer().getUniqueId());
             if (isHoldingItem(event)) {
+                PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(event.getPlayer().getUniqueId());
                 if (data.getAbilityCD().hasCooldown(20)) {
                     data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
-                    PotionEffect resistance = new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 1);
+                    PotionEffect resistance = new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 0);
                     PotionEffect strength = new PotionEffect(PotionEffectType.SPEED, 200, 1);
                     data.getPlayer().addPotionEffect(resistance);
                     data.getPlayer().addPotionEffect(strength);

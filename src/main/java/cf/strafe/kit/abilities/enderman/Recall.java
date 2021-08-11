@@ -20,8 +20,8 @@ public class Recall extends Ability {
     @EventHandler
     public void onRightClick(PlayerInteractEvent event) {
         if (event.getAction() == Action.RIGHT_CLICK_AIR) {
-            PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(event.getPlayer().getUniqueId());
-            if (isHoldingItem(data.getPlayer())) {
+            if (isHoldingItem(event.getPlayer())) {
+                PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(event.getPlayer().getUniqueId());
                 if (data.getAbilityCD().hasCooldown(40)) {
                     data.countDown = 5;
                     data.setRecallLocation(data.getPlayer().getLocation());

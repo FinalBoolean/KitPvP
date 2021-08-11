@@ -45,9 +45,8 @@ public class PlayerListener implements Listener {
         PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
         if( !event.getPlayer().hasPermission("kitpvp.admin")) {
             if (!data.getChatCD().hasCooldown(Config.CHAT_CD)) {
-                event.setCancelled(true);
-            } else {
                 player.sendMessage(ColorUtil.translate(String.format("&cThere is a &4%s &csecond chat delay!", data.getChatCD().getSeconds())));
+                event.setCancelled(true);
             }
         }
         if(data.isStaffchat()) {

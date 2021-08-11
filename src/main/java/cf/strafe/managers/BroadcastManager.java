@@ -2,6 +2,7 @@ package cf.strafe.managers;
 
 import cf.strafe.KitPvP;
 import cf.strafe.config.Config;
+import cf.strafe.data.PlayerData;
 import cf.strafe.utils.DefaultFontInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,12 +26,13 @@ public class BroadcastManager {
             List<String> messages = config.getStringList("announcements.announcement" + counter);
             for (String message : messages) {
 
-                for (Player p : Bukkit.getOnlinePlayers()) {
+                for (PlayerData data : KitPvP.INSTANCE.getDataManager().getUsers().values()) {
                     if (message.contains("[center]")) {
-                        sendCenteredMessage(p, message.replace("[center]", ""));
+                        sendCenteredMessage(data.getPlayer(), message.replace("[center]", ""));
                     } else {
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                        data.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
                     }
+                    data.saveData();
                 }
 
             }

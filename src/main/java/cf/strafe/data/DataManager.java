@@ -7,11 +7,12 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
 public class DataManager {
 
-    private final Map<UUID, PlayerData> users = new HashMap<>();
+    private final ConcurrentHashMap<UUID, PlayerData> users = new ConcurrentHashMap<>();
 
     public void uninject(Player player) {
         KitPvP.INSTANCE.getExecutor().execute(() -> {
@@ -23,6 +24,11 @@ public class DataManager {
     }
 
     public void inject(Player player) {
+        for(PlayerData data : users.values()) {
+            if(data.isVanished() && !player.hasPermission("kitpvp.staff")) {
+                player.hidePlayer(data.getPlayer());
+            }
+        }
         KitPvP.INSTANCE.getExecutor().execute(() -> {
             PlayerData duelUser = new PlayerData(player);
             users.put(player.getUniqueId(), duelUser);
@@ -30,11 +36,7 @@ public class DataManager {
             duelUser.giveKit(KitPvP.INSTANCE.getKitManager().getKits().get(0));
             KitPvP.INSTANCE.getScoreboardManager().create(player);
         });
-        for(PlayerData data : users.values()) {
-            if(data.isVanished() && !player.hasPermission("kitpvp.staff")) {
-                player.hidePlayer(data.getPlayer());
-            }
-        }
+
     }
 
     public PlayerData getPlayer(UUID id) {

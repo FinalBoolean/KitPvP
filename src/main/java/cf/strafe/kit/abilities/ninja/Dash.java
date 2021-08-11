@@ -24,6 +24,7 @@ public class Dash extends Ability {
             if(isHoldingItem(event.getPlayer())) {
                 PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(event.getPlayer().getUniqueId());
                 if (data.getAbilityCD().hasCooldown(10)) {
+                    data.getPlayer().sendMessage(ChatColor.GREEN + "(!) You used Dash!");
                     PotionEffect invisibility = new PotionEffect(PotionEffectType.INVISIBILITY, 60, 1);
                     PotionEffect strength = new PotionEffect(PotionEffectType.SPEED, 60, 3);
                     data.getPlayer().playSound(data.getPlayer().getLocation(), Sound.ENTITY_HORSE_GALLOP, 1, 1);

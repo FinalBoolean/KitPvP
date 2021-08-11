@@ -1,14 +1,14 @@
 package cf.strafe.kit;
 
-import cf.strafe.kit.abilities.archer.ArcherTag;
+import cf.strafe.KitPvP;
 import cf.strafe.kit.abilities.enderman.Recall;
 import cf.strafe.kit.abilities.knight.BattleStrength;
 import cf.strafe.kit.abilities.ninja.Dash;
-import lombok.Getter;
-import cf.strafe.KitPvP;
+import cf.strafe.kit.abilities.pyro.FlameSword;
 import cf.strafe.kit.abilities.thumper.KnockOut;
 import cf.strafe.kit.abilities.vampire.Vampire;
 import cf.strafe.utils.ColorUtil;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -30,6 +30,7 @@ public class KitManager {
         loadVampire();
         loadNinja();
         loadEnderman();
+        loadPyro();
     }
 
     public void loadKit(Kit kit) {
@@ -60,12 +61,10 @@ public class KitManager {
         List<ItemStack> items = new ArrayList<>();
         ItemStack sword = createItem(Material.STONE_SWORD, "&6Archer Sword", "&aEpik weapon for slicing foes.");
         ItemStack bow = createInfiniteBow(Material.BOW, "&6Archer Bow", "&1Bow");
-        ItemStack arrow = createItem(Material.ARROW, "&aMachine Gun", "&aRight click to fire a machine gun");
+        ItemStack arrow = createItem(Material.ARROW, "&aArrow");
         items.add(sword);
         items.add(bow);
         items.add(arrow);
-
-        KitPvP.INSTANCE.getPlugin().getServer().getPluginManager().registerEvents(new ArcherTag(arrow), KitPvP.INSTANCE.getPlugin());
 
         List<ItemStack> armor = new ArrayList<>();
         armor.add(createItem(Material.CHAINMAIL_BOOTS, "&aChain Boots"));
@@ -105,8 +104,8 @@ public class KitManager {
     public void loadVampire() {
         List<ItemStack> items = new ArrayList<>();
 
-        ItemStack sword = createItem(Material.STONE_SWORD, "&cVampire Sword", "Has a chance to heal you when attacking");
-        sword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+        ItemStack sword = createItem(Material.IRON_SWORD, "&cVampire Sword", "Has a chance to heal you when attacking");
+
         items.add(sword);
         KitPvP.INSTANCE.getPlugin().getServer().getPluginManager().registerEvents(new Vampire(sword), KitPvP.INSTANCE.getPlugin());
 
@@ -172,6 +171,26 @@ public class KitManager {
         kits.add(new Kit(ColorUtil.translate("&dEnderman"), Material.ENDER_PEARL, 25, convertitems, convertarmor, ColorUtil.translate("&dTeleport around places")));
     }
 
+    public void loadPyro() {
+        List<ItemStack> items = new ArrayList<>();
+
+        ItemStack sword = createItem(Material.STONE_SWORD, "&cPyro Sword", "&4Transform your sword into a fire sword on right click!");
+        items.add(sword);
+
+        KitPvP.INSTANCE.getPlugin().getServer().getPluginManager().registerEvents(new FlameSword(sword), KitPvP.INSTANCE.getPlugin());
+
+        List<ItemStack> armor = new ArrayList<>();
+        armor.add(createItem(Material.CHAINMAIL_BOOTS, "&aChain Boots"));
+        armor.add(createItem(Material.CHAINMAIL_LEGGINGS, "&aChain Leggings"));
+        armor.add(createItem(Material.CHAINMAIL_CHESTPLATE, "&aChain Chestplate"));
+        armor.add(createItem(Material.CHAINMAIL_HELMET, "&aChain Helmet"));
+
+        ItemStack[] convertitems = new ItemStack[items.size()];
+        items.toArray(convertitems);
+        ItemStack[] convertarmor = new ItemStack[armor.size()];
+        armor.toArray(convertarmor);
+        kits.add(new Kit(ColorUtil.translate("&cPyro"), Material.BLAZE_POWDER, 30, convertitems, convertarmor, ColorUtil.translate("&cHarness the power of &4FIRE!")));
+    }
 
 
     protected ItemStack createItem(final Material material, final String name, final String... lore) {
