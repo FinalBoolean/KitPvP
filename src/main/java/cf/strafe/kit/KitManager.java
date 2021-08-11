@@ -5,12 +5,15 @@ import cf.strafe.kit.abilities.enderman.Recall;
 import cf.strafe.kit.abilities.knight.BattleStrength;
 import cf.strafe.kit.abilities.ninja.Dash;
 import cf.strafe.kit.abilities.pyro.FlameSword;
+import cf.strafe.kit.abilities.switcher.Switcher;
 import cf.strafe.kit.abilities.thumper.KnockOut;
 import cf.strafe.kit.abilities.vampire.Vampire;
 import cf.strafe.utils.ColorUtil;
 import lombok.Getter;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -31,6 +34,7 @@ public class KitManager {
         loadNinja();
         loadEnderman();
         loadPyro();
+        loadSwitcher();
     }
 
     public void loadKit(Kit kit) {
@@ -190,6 +194,35 @@ public class KitManager {
         ItemStack[] convertarmor = new ItemStack[armor.size()];
         armor.toArray(convertarmor);
         kits.add(new Kit(ColorUtil.translate("&cPyro"), Material.BLAZE_POWDER, 30, convertitems, convertarmor, ColorUtil.translate("&cHarness the power of &4FIRE!")));
+    }
+
+    public void loadSwitcher() {
+        List<ItemStack> items = new ArrayList<>();
+
+        ItemStack sword = createItem(Material.STONE_SWORD, "&eSwitcher Sword", "");
+        items.add(sword);
+
+        ItemStack ability = new ItemStack(Material.SNOWBALL, 4);
+        ItemMeta abilityMeta = ability.getItemMeta();
+        abilityMeta.setDisplayName(ColorUtil.translate("&fSwitcher Ball"));
+        ability.setItemMeta(abilityMeta);
+
+        items.add(ability);
+
+        KitPvP.INSTANCE.getPlugin().getServer().getPluginManager().registerEvents(new Switcher(), KitPvP.INSTANCE.getPlugin());
+
+        List<ItemStack> armor = new ArrayList<>();
+        armor.add(createItem(Material.CHAINMAIL_BOOTS, "&aChain Boots"));
+        armor.add(createItem(Material.CHAINMAIL_LEGGINGS, "&aChain Leggings"));
+        armor.add(createItem(Material.CHAINMAIL_CHESTPLATE, "&aChain Chestplate"));
+        armor.add(createItem(Material.CHAINMAIL_HELMET, "&aChain Helmet"));
+
+        ItemStack[] convertitems = new ItemStack[items.size()];
+        items.toArray(convertitems);
+        ItemStack[] convertarmor = new ItemStack[armor.size()];
+        armor.toArray(convertarmor);
+
+        kits.add(new Kit(ColorUtil.translate("&fSwitcher"), Material.SNOWBALL, 35, convertitems, convertarmor, ColorUtil.translate("&fSwap Positions with your opponents")));
     }
 
 

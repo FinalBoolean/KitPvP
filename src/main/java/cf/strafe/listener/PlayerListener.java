@@ -19,6 +19,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -63,6 +65,14 @@ public class PlayerListener implements Listener {
             PlayerData killedUser = KitPvP.INSTANCE.getDataManager().getPlayer(killed.getUniqueId());
             PlayerData killerUser = KitPvP.INSTANCE.getDataManager().getPlayer(killer.getUniqueId());
 
+            if (killerUser.getKit().getName().equalsIgnoreCase("Switcher")) {
+                ItemStack ability = new ItemStack(Material.SNOWBALL, 1);
+                ItemMeta abilityMeta = ability.getItemMeta();
+                abilityMeta.setDisplayName(ColorUtil.translate("&fSwitcher Ball"));
+                ability.setItemMeta(abilityMeta);
+                killer.getInventory().addItem(ability);
+            }
+
             killedUser.setKillStreak(0);
             killedUser.setDeaths(killedUser.getDeaths() + 1);
             //Kill rewards
@@ -71,7 +81,7 @@ public class PlayerListener implements Listener {
                 killerUser.setMaxKillStreak(killerUser.getMaxKillStreak());
             }
             killerUser.setKills(killerUser.getKills() + 1);
-            double xpAdd = (int) Math.abs(Math.ceil(Math.random() * killerUser.getLevel() - Math.ceil(Math.random() * killerUser.getLevel()))) + 1;
+            double xpAdd = Math.ceil(Math.random() * 5) + 5;
             killerUser.setXp(killerUser.getXp() + xpAdd);
             killer.sendMessage(ChatColor.GREEN + "" + xpAdd + "+");
             killerUser.getPlayer().getInventory().addItem(ItemUtil.createItem(Material.GOLDEN_APPLE));
@@ -85,13 +95,16 @@ public class PlayerListener implements Listener {
                 killerUser.setXp(0);
                 killerUser.setLevel(killerUser.getLevel() + 1);
                 killer.playSound(killer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
-                killerUser.setNeededXp((int) (2 * killerUser.getLevel() + Math.ceil(Math.random() * killerUser.getLevel())));
+                killerUser.setNeededXp(killer.getLevel() * 25);
             } else {
                 killer.playSound(killer.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1, 1);
             }
             Bukkit.getScheduler().scheduleSyncDelayedTask(KitPvP.INSTANCE.getPlugin(), () -> {
                 killed.spigot().respawn();
             }, 5L);
+
+            killerUser.getPlayer().setLevel(killerUser.getLevel());
+            killerUser.getPlayer().setExp((float) (killerUser.getXp() / killerUser.getNeededXp()));
 
             event.setDeathMessage(ColorUtil.translate(Config.KILL_MESSAGE.replace("%killer%", killer.getName()).replace("%victim%", killed.getName())));
         }
