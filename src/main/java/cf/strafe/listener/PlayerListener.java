@@ -64,13 +64,14 @@ public class PlayerListener implements Listener {
         if(killer != null) {
             PlayerData killedUser = KitPvP.INSTANCE.getDataManager().getPlayer(killed.getUniqueId());
             PlayerData killerUser = KitPvP.INSTANCE.getDataManager().getPlayer(killer.getUniqueId());
-
-            if (killerUser.getKit().getName().equalsIgnoreCase("Switcher")) {
-                ItemStack ability = new ItemStack(Material.SNOWBALL, 1);
-                ItemMeta abilityMeta = ability.getItemMeta();
-                abilityMeta.setDisplayName(ColorUtil.translate("&fSwitcher Ball"));
-                ability.setItemMeta(abilityMeta);
-                killer.getInventory().addItem(ability);
+            if(killerUser.getLastKit() != null) {
+                if (killerUser.getLastKit().getName().contains("Switcher")) {
+                    ItemStack ability = new ItemStack(Material.SNOWBALL, 1);
+                    ItemMeta abilityMeta = ability.getItemMeta();
+                    abilityMeta.setDisplayName(ColorUtil.translate("&fSwitcher Ball"));
+                    ability.setItemMeta(abilityMeta);
+                    killer.getInventory().addItem(ability);
+                }
             }
 
             killedUser.setKillStreak(0);

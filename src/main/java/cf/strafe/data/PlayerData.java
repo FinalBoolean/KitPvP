@@ -22,7 +22,7 @@ public class PlayerData {
     private UUID uuid;
     @Setter(AccessLevel.NONE)
     private Player player;
-    private Kit kit, lastKit;
+    private Kit lastKit;
 
     private int kills, deaths, level, killStreak, maxKillStreak, credits;
     private double xp, neededXp;
