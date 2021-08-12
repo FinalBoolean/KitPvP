@@ -49,7 +49,7 @@ public class EventCommand implements CommandExecutor
                                                 player.sendMessage(ChatColor.GREEN + "Started event");
                                             } else {
                                                 player.sendMessage(ChatColor.RED + "Available maps: ");
-                                                for (SumoMap map : MapManager.getSumoMaps()) {
+                                                for (FFAMap map : MapManager.getFfaMaps()) {
                                                     player.sendMessage(ChatColor.GREEN + map.getMapName());
                                                 }
                                             }

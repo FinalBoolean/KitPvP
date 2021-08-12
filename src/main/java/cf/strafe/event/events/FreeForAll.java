@@ -20,7 +20,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FreeForAll extends Event implements Listener {
+public class FreeForAll extends Event {
     private final FFAMap map;
 
     public FreeForAll(FFAMap map, PlayerData host) {

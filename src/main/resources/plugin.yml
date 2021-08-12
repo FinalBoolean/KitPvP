@@ -26,3 +26,5 @@ commands:
     description: ALlows the player to create events
   sumo:
     description: ALlows staff to create sumo events
+  ffa:
+    description: Allows staff to create ffa events
