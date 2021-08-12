@@ -23,6 +23,10 @@ public abstract class Event {
     public abstract void update();
 
     public void addPlayer(PlayerData player) {
+        if (players.size() >= maxPlayers) {
+            player.getPlayer().sendMessage(ColorUtil.translate("&cThat event is fulL!"));
+            return;
+        }
         if (state == State.WAITING) {
             if (!players.contains(player)) {
                 players.add(player);

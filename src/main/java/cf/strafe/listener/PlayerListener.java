@@ -104,10 +104,11 @@ public class PlayerListener implements Listener {
                 killed.spigot().respawn();
             }, 5L);
 
-            killerUser.getPlayer().setLevel(killerUser.getLevel());
-            killerUser.getPlayer().setExp((float) Math.min(1, killerUser.getXp() / killerUser.getNeededXp()));
-
             event.setDeathMessage(ColorUtil.translate(Config.KILL_MESSAGE.replace("%killer%", killer.getName()).replace("%victim%", killed.getName())));
+
+            killerUser.getPlayer().setLevel(killerUser.getLevel());
+            killerUser.getPlayer().setExp((float) Math.max(0.99, killerUser.getXp() / killerUser.getNeededXp()));
+
         }
     }
 

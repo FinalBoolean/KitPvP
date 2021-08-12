@@ -6,6 +6,10 @@ import cf.strafe.event.Event;
 import cf.strafe.event.map.SumoMap;
 import cf.strafe.utils.ColorUtil;
 import cf.strafe.utils.Pair;
+import cf.strafe.utils.scoreboard.FastBoard;
+import lombok.Getter;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -13,6 +17,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Sumo extends Event {
@@ -34,29 +40,32 @@ public class Sumo extends Event {
     public void addPlayer(PlayerData player) {
         player.getPlayer().teleport(map.getSpawnLocation());
         player.getPlayer().getInventory().clear();
+        KitPvP.INSTANCE.getScoreboardManager().get(player.getPlayer()).updateLines();
         super.addPlayer(player);
+        //for (PlayerData loopPlayer : players) {
+        //loopPlayer.getPlayer().sendMessage(ColorUtil.translate("&6[Event] &f" + player.getPlayer().getName() + " &7has joined the event! &e(" + players.size() + "/" + maxPlayers + ")"));
+        //}
     }
-
 
     @Override
     public void update() {
+        updateBoard();
         switch (state) {
             case WAITING: {
                 gameTime--;
-                if (gameTime == 29) {
-                    Bukkit.broadcastMessage(ColorUtil.translate("&7[&6SUMO&7] &f" + host.getPlayer().getName() + " &7is hosting a &fSumo Event! &edo /sumo join!"));
-                }
-
-                if (gameTime == 20) {
-                    Bukkit.broadcastMessage(ColorUtil.translate("&7[&6SUMO&7] &f" + host.getPlayer().getName() + " &7is hosting a &fSumo Event! &edo /sumo join!"));
-                }
-                if (gameTime == 10) {
-                    Bukkit.broadcastMessage(ColorUtil.translate("&7[&6SUMO&7] &f" + host.getPlayer().getName() + " &7is hosting a &fSumo Event! &edo /sumo join!"));
+                if (gameTime == 29 || gameTime == 20 || gameTime == 10) {
+                    TextComponent textComponent = new TextComponent(ColorUtil.translate("&6[Event] &f" + host.getPlayer().getName() + " &7is hosting a &fSumo Event! &a[Click to join]"));
+                    textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sumo join"));
+                    Bukkit.broadcastMessage(ColorUtil.translate("&7"));
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        player.spigot().sendMessage(textComponent);
+                    }
+                    Bukkit.broadcastMessage(ColorUtil.translate("&7"));
                 }
                 if (gameTime == 0) {
                     if (players.size() > 1) {
                         state = State.INGAME;
-                        Bukkit.broadcastMessage(ChatColor.GREEN + "Sumo event has started!");
+                        Bukkit.broadcastMessage(ColorUtil.translate("&6[Event] &fSumo Event &7has started!"));
                     } else {
                         KitPvP.INSTANCE.getEventManager().deleteEvent("Not enough players.");
                     }
@@ -78,7 +87,7 @@ public class Sumo extends Event {
                         randomPlayer2 = players.get(random.nextInt(players.size()));
                     }
                     if(players.size() < 2) {
-                        Bukkit.broadcastMessage(ChatColor.GREEN  + "Game ended! " + players.get(0).getPlayer().getName() + " won!");
+                        Bukkit.broadcastMessage(ColorUtil.translate("&6[Event] &f" + players.get(0).getPlayer().getName() + " &7has won the &fSumo Event&7!"));
                         state = State.END;
                     }
 
@@ -86,10 +95,34 @@ public class Sumo extends Event {
                     roundPlayers.setY(randomPlayer2);
                 } else {
                     if (gameTime == 5) {
-                        players.forEach(playerData -> playerData.getPlayer().sendMessage(ChatColor.GREEN + "Round " + round + ". Next up is " + roundPlayers.getX().getPlayer().getName() + " vs " + roundPlayers.getY().getPlayer().getName()));
+                        players.forEach(playerData -> playerData.getPlayer().sendMessage(ColorUtil.translate("&6[Event] &eRound #" + round + ": &f" + roundPlayers.getX().getPlayer().getName() + " &7vs &f" + roundPlayers.getY().getPlayer().getName())));
+
+                        roundPlayers.getX().getPlayer().teleport(map.getFightLocation1());
+                        roundPlayers.getY().getPlayer().teleport(map.getFightLocation2());
+
+                        PotionEffect potionEffect = PotionEffectType.JUMP.createEffect(5, 200);
+                        roundPlayers.getX().getPlayer().addPotionEffect(potionEffect);
+                        roundPlayers.getY().getPlayer().addPotionEffect(potionEffect);
+
+                        PotionEffect potionEffect2 = PotionEffectType.SLOW.createEffect(5, 100);
+                        roundPlayers.getX().getPlayer().addPotionEffect(potionEffect2);
+                        roundPlayers.getY().getPlayer().addPotionEffect(potionEffect2);
+
+                        roundPlayers.getX().getPlayer().sendMessage(ColorUtil.translate("&6[Event] &7Round against &f" + roundPlayers.getY().getPlayer().getName() + " &7starting in &f5s..."));
+                        roundPlayers.getY().getPlayer().sendMessage(ColorUtil.translate("&6[Event] &7Round against &f" + roundPlayers.getX().getPlayer().getName() + " &7starting in &f5s..."));
+
+                    }
+                    if (gameTime > 0 && gameTime < 4) {
+                        roundPlayers.getX().getPlayer().teleport(map.getFightLocation1());
+                        roundPlayers.getY().getPlayer().teleport(map.getFightLocation2());
+
+                        String roundMSG = ColorUtil.translate("&6[Event] &7Round starting in &f" + gameTime + "s");
+                        roundPlayers.getX().getPlayer().sendMessage(roundMSG);
+                        roundPlayers.getY().getPlayer().sendMessage(roundMSG);
+
                     }
                     if(players.size() < 2) {
-                        Bukkit.broadcastMessage(ChatColor.GREEN  + "Game ended! " + players.get(0).getPlayer().getName() + " won!");
+                        Bukkit.broadcastMessage(ColorUtil.translate("&6[Event] &f" + players.get(0).getPlayer().getName() + " &7has won the &fSumo Event&7!"));
 
                         state = State.END;
 
@@ -97,9 +130,20 @@ public class Sumo extends Event {
                     if (gameTime == 1) {
                         roundPlayers.getX().getPlayer().teleport(map.getFightLocation1());
                         roundPlayers.getY().getPlayer().teleport(map.getFightLocation2());
+
                         PotionEffect potionEffect = PotionEffectType.DAMAGE_RESISTANCE.createEffect(999999, 255);
                         roundPlayers.getX().getPlayer().addPotionEffect(potionEffect);
                         roundPlayers.getY().getPlayer().addPotionEffect(potionEffect);
+
+                        roundPlayers.getX().getPlayer().removePotionEffect(PotionEffectType.JUMP);
+                        roundPlayers.getY().getPlayer().removePotionEffect(PotionEffectType.JUMP);
+
+                        roundPlayers.getX().getPlayer().removePotionEffect(PotionEffectType.SLOW);
+                        roundPlayers.getY().getPlayer().removePotionEffect(PotionEffectType.SLOW);
+
+                        String roundMSG = ColorUtil.translate("&6[Event] &aRound has started!");
+                        roundPlayers.getX().getPlayer().sendMessage(roundMSG);
+                        roundPlayers.getY().getPlayer().sendMessage(roundMSG);
                     }
                     if(gameTime == 0) {
 
@@ -139,6 +183,34 @@ public class Sumo extends Event {
             }
         }
 
+    }
+
+    private void updateBoard() {
+        List<PlayerData> allPlayers = new ArrayList<PlayerData>(players);
+        allPlayers.addAll(spectators);
+        PlayerData playerX = roundPlayers.getX();
+        PlayerData playerY = roundPlayers.getY();
+        for (PlayerData boardPlayer : allPlayers) {
+            FastBoard board = KitPvP.INSTANCE.getScoreboardManager().get(boardPlayer.getPlayer());
+            if (board.getLines().size() > 8) {
+                board.updateLines();
+            }
+            board.updateTitle(ColorUtil.translate("&6&lStrafed &7┃ &fKits"));
+            board.updateLine(0, ColorUtil.translate("&7&m------------------"));
+            board.updateLine(1, ColorUtil.translate("&6Event: &fSumo"));
+            board.updateLine(2, ColorUtil.translate("&6Players: &f" + players.size() + "/" + maxPlayers));
+            board.updateLine(3, ColorUtil.translate("&7&m------------------"));
+            if (playerX != null && playerY != null) {
+                board.updateLine(4, ColorUtil.translate(playerX.getPlayer().getName() + " &evs &f" + playerY.getPlayer().getName()));
+            } else if(state == State.WAITING) {
+                board.updateLine(4, ColorUtil.translate("&6Starting in: &f" + gameTime + "s"));
+            } else {
+                board.updateLine(4, ColorUtil.translate("&eWaiting for players..."));
+            }
+            board.updateLine(5, "");
+            board.updateLine(6, "strafekits.minehut.gg");
+            board.updateLine(7, ColorUtil.translate("&7&m------------------"));
+        }
     }
 
 }

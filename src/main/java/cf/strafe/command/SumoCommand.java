@@ -16,6 +16,18 @@ public class SumoCommand implements CommandExecutor {
         if (sender instanceof Player) {
             Player player = ((Player) sender).getPlayer();
             if (player.hasPermission("kitpvp.staff")) {
+                if (args.length == 1) {
+                    if (args[0].equalsIgnoreCase("join")) {
+                        if(KitPvP.INSTANCE.getEventManager().event != null) {
+                            PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
+                            KitPvP.INSTANCE.getEventManager().event.addPlayer(data);
+                            player.sendMessage(ChatColor.GREEN + "You joined the event");
+                        } else {
+                            player.sendMessage(ChatColor.RED + "No event is on");
+                        }
+                        return false;
+                    }
+                }
                 if (args.length > 1) {
                     switch (args[0].toLowerCase()) {
                         case "create": {
