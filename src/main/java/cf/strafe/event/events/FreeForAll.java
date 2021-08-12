@@ -73,11 +73,15 @@ public class FreeForAll extends Event {
             }
 
             case INGAME: {
-                for (PlayerData data : players) {
-                    data.getPlayer().teleport(map.getFightLocation());
-                    data.getPlayer().sendMessage(ColorUtil.translate("&6[Event] &fFree for all!"));
+                gameTime++;
+                if(gameTime == 1) {
+                    for (PlayerData data : players) {
+                        data.getPlayer().teleport(map.getFightLocation());
+                        data.getPlayer().sendMessage(ColorUtil.translate("&6[Event] &fFree for all!"));
+                    }
                 }
                 if(players.size() < 2) {
+                    Bukkit.broadcastMessage(ColorUtil.translate("&6[Event] &f" + players.get(0).getPlayer().getName() + " &7has won the &fFFA Event&7!"));
                     state = State.END;
                 }
                 break;

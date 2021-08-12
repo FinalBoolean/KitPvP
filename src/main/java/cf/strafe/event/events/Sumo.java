@@ -142,15 +142,9 @@ public class Sumo extends Event {
                         roundPlayers.getX().getPlayer().getInventory().clear();
                         roundPlayers.getY().getPlayer().getInventory().clear();
 
-                        PotionEffect potionEffect = PotionEffectType.DAMAGE_RESISTANCE.createEffect(999999, 255);
+                        PotionEffect potionEffect = PotionEffectType.DAMAGE_RESISTANCE.createEffect(999999, 100);
                         roundPlayers.getX().getPlayer().addPotionEffect(potionEffect);
                         roundPlayers.getY().getPlayer().addPotionEffect(potionEffect);
-
-                        roundPlayers.getX().getPlayer().removePotionEffect(PotionEffectType.JUMP);
-                        roundPlayers.getY().getPlayer().removePotionEffect(PotionEffectType.JUMP);
-
-                        roundPlayers.getX().getPlayer().removePotionEffect(PotionEffectType.SLOW);
-                        roundPlayers.getY().getPlayer().removePotionEffect(PotionEffectType.SLOW);
 
                         String roundMSG = ColorUtil.translate("&6[Event] &aRound has started!");
                         roundPlayers.getX().getPlayer().sendMessage(roundMSG);

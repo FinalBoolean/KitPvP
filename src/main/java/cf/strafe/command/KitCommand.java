@@ -15,7 +15,7 @@ public class KitCommand implements CommandExecutor {
             Player player = ((Player) sender).getPlayer();
             PlayerData playerData = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
             if(KitPvP.INSTANCE.getEventManager().event != null) {
-                if (!KitPvP.INSTANCE.getEventManager().event.getSpectators().contains(playerData) && KitPvP.INSTANCE.getEventManager().event.getPlayers().contains(playerData)) {
+                if (!KitPvP.INSTANCE.getEventManager().event.getSpectators().contains(playerData) && !KitPvP.INSTANCE.getEventManager().event.getPlayers().contains(playerData)) {
                     KitGui kitGui = new KitGui(playerData);
 
                     kitGui.openGui(player);

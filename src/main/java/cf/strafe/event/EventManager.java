@@ -35,7 +35,7 @@ public class EventManager {
 
     public void createFFAEvent(Event.Type e, PlayerData host, FFAMap ffaMap) {
         this.host = host;
-        if (e == Event.Type.SUMO) {
+        if (e == Event.Type.FFA) {
             event = new FreeForAll(ffaMap, host);
         }
     }
