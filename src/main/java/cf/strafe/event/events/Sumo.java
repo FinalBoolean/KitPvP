@@ -131,6 +131,17 @@ public class Sumo extends Event {
                         roundPlayers.getX().getPlayer().teleport(map.getFightLocation1());
                         roundPlayers.getY().getPlayer().teleport(map.getFightLocation2());
 
+                        for(PotionEffect loopEffectX : roundPlayers.getX().getPlayer().getActivePotionEffects()){
+                            roundPlayers.getX().getPlayer().removePotionEffect(loopEffectX.getType());
+                        }
+
+                        for(PotionEffect loopEffectY : roundPlayers.getY().getPlayer().getActivePotionEffects()){
+                            roundPlayers.getY().getPlayer().removePotionEffect(loopEffectY.getType());
+                        }
+
+                        roundPlayers.getX().getPlayer().getInventory().clear();
+                        roundPlayers.getY().getPlayer().getInventory().clear();
+
                         PotionEffect potionEffect = PotionEffectType.DAMAGE_RESISTANCE.createEffect(999999, 255);
                         roundPlayers.getX().getPlayer().addPotionEffect(potionEffect);
                         roundPlayers.getY().getPlayer().addPotionEffect(potionEffect);
