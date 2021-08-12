@@ -19,6 +19,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -57,6 +58,20 @@ public class PlayerListener implements Listener {
         }
     }
 
+
+    @EventHandler
+    public void onDeath(PlayerRespawnEvent event) {
+        Player player = event.getPlayer();
+        PlayerData killedUser = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
+
+        if(KitPvP.INSTANCE.getEventManager().event != null) {
+            if(KitPvP.INSTANCE.getEventManager().event.getPlayers().contains(killedUser)) {
+                KitPvP.INSTANCE.getEventManager().event.onDeath(killedUser);
+            }
+        }
+
+    }
+
     @EventHandler
     public void onKill(PlayerDeathEvent event) {
         Player killed = event.getEntity();
@@ -73,7 +88,6 @@ public class PlayerListener implements Listener {
                     killer.getInventory().addItem(ability);
                 }
             }
-
             killedUser.setKillStreak(0);
             killedUser.setDeaths(killedUser.getDeaths() + 1);
             //Kill rewards

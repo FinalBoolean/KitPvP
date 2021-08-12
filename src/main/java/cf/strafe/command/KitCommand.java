@@ -12,13 +12,17 @@ public class KitCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
         if (sender instanceof Player) {
-            if (!KitPvP.INSTANCE.getEventManager().event.players.contains((Player) sender)) {
-                if (!KitPvP.INSTANCE.getEventManager().event.spectators.contains((Player) sender)) {
-                    Player player = ((Player) sender).getPlayer();
-                    PlayerData playerData = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
+            Player player = ((Player) sender).getPlayer();
+            PlayerData playerData = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
+            if(KitPvP.INSTANCE.getEventManager().event != null) {
+                if (!KitPvP.INSTANCE.getEventManager().event.getSpectators().contains(playerData) && KitPvP.INSTANCE.getEventManager().event.getPlayers().contains(playerData)) {
                     KitGui kitGui = new KitGui(playerData);
+
                     kitGui.openGui(player);
                 }
+            } else {
+                KitGui kitGui = new KitGui(playerData);
+                kitGui.openGui(player);
             }
         }
         return false;

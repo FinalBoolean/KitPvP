@@ -4,6 +4,7 @@ import cf.strafe.KitPvP;
 import cf.strafe.data.PlayerData;
 import cf.strafe.event.Event;
 import cf.strafe.event.events.Sumo;
+import cf.strafe.event.map.FFAMap;
 import cf.strafe.event.map.MapManager;
 import cf.strafe.event.map.SumoMap;
 import org.bukkit.ChatColor;
@@ -25,20 +26,35 @@ public class EventCommand implements CommandExecutor
                         case "start": {
                             if(args.length > 2) {
                                 if(KitPvP.INSTANCE.getEventManager().event == null) {
-                                    if (args[1].equalsIgnoreCase("sumo")) {
-                                        SumoMap sumoMap = MapManager.getSumoMap(args[2]);
-                                        if (sumoMap != null) {
-                                            PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
-                                            KitPvP.INSTANCE.getEventManager().createSumoEvent(Event.Type.SUMO, data, sumoMap);
-                                            player.sendMessage(ChatColor.GREEN + "Started event");
-                                        } else {
-                                            player.sendMessage(ChatColor.RED + "Available maps: ");
-                                            for (SumoMap map : MapManager.getSumoMaps()) {
-                                                player.sendMessage(ChatColor.GREEN + map.getMapName());
+                                    switch (args[1]) {
+                                        case "sumo": {
+                                            SumoMap sumoMap = MapManager.getSumoMap(args[2]);
+                                            if (sumoMap != null) {
+                                                PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
+                                                KitPvP.INSTANCE.getEventManager().createSumoEvent(Event.Type.SUMO, data, sumoMap);
+                                                player.sendMessage(ChatColor.GREEN + "Started event");
+                                            } else {
+                                                player.sendMessage(ChatColor.RED + "Available maps: ");
+                                                for (SumoMap map : MapManager.getSumoMaps()) {
+                                                    player.sendMessage(ChatColor.GREEN + map.getMapName());
+                                                }
                                             }
+                                            break;
                                         }
-                                    } else {
-                                        player.sendMessage(ChatColor.RED + "Available events: sumo");
+                                        case "ffa": {
+                                            FFAMap ffaMap = MapManager.getFFAMap(args[2]);
+                                            if (ffaMap != null) {
+                                                PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
+                                                KitPvP.INSTANCE.getEventManager().createFFAEvent(Event.Type.FFA, data, ffaMap);
+                                                player.sendMessage(ChatColor.GREEN + "Started event");
+                                            } else {
+                                                player.sendMessage(ChatColor.RED + "Available maps: ");
+                                                for (SumoMap map : MapManager.getSumoMaps()) {
+                                                    player.sendMessage(ChatColor.GREEN + map.getMapName());
+                                                }
+                                            }
+                                            break;
+                                        }
                                     }
                                 } else {
                                     player.sendMessage(ChatColor.RED + "An event is already going on");

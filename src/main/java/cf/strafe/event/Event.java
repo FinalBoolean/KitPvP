@@ -5,13 +5,15 @@ import cf.strafe.data.PlayerData;
 import cf.strafe.utils.ColorUtil;
 import lombok.Getter;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
 
 @Getter
-public abstract class Event {
+public abstract class Event implements Listener {
 
     public PlayerData host;
     public ArrayList<PlayerData> players = new ArrayList<>();
@@ -40,6 +42,10 @@ public abstract class Event {
         }
     }
 
+    public void onDeath(PlayerData playerData) {
+
+    }
+
     public void removePlayer(PlayerData player) {
         if (players.contains(player)) {
             players.remove(player);
@@ -57,6 +63,7 @@ public abstract class Event {
         }
     }
 
+
     public enum State {
         WAITING, INGAME, END;
 
@@ -72,7 +79,7 @@ public abstract class Event {
     }
 
     public enum Type {
-        SUMO;
+        SUMO, FFA;
 
         public String toString() {
             return StringUtils.capitalize(this.name().toLowerCase());

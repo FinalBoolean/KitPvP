@@ -176,6 +176,7 @@ public enum KitPvP {
         plugin.getCommand("stats").setExecutor(new StatsCommand());
         plugin.getCommand("sumo").setExecutor(new SumoCommand());
         plugin.getCommand("event").setExecutor(new EventCommand());
+        plugin.getCommand("ffa").setExecutor(new FFACommand());
     }
 
 

@@ -2,7 +2,9 @@ package cf.strafe.event;
 
 import cf.strafe.KitPvP;
 import cf.strafe.data.PlayerData;
+import cf.strafe.event.events.FreeForAll;
 import cf.strafe.event.events.Sumo;
+import cf.strafe.event.map.FFAMap;
 import cf.strafe.event.map.SumoMap;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -27,6 +29,14 @@ public class EventManager {
         this.host = host;
         if (e == Event.Type.SUMO) {
             event = new Sumo(sumoMap, host);
+        }
+    }
+
+
+    public void createFFAEvent(Event.Type e, PlayerData host, FFAMap ffaMap) {
+        this.host = host;
+        if (e == Event.Type.SUMO) {
+            event = new FreeForAll(ffaMap, host);
         }
     }
 

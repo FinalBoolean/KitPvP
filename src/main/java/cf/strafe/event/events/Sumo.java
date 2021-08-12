@@ -100,11 +100,11 @@ public class Sumo extends Event {
                         roundPlayers.getX().getPlayer().teleport(map.getFightLocation1());
                         roundPlayers.getY().getPlayer().teleport(map.getFightLocation2());
 
-                        PotionEffect potionEffect = PotionEffectType.JUMP.createEffect(5, 200);
+                        PotionEffect potionEffect = PotionEffectType.JUMP.createEffect(100, 200);
                         roundPlayers.getX().getPlayer().addPotionEffect(potionEffect);
                         roundPlayers.getY().getPlayer().addPotionEffect(potionEffect);
 
-                        PotionEffect potionEffect2 = PotionEffectType.SLOW.createEffect(5, 100);
+                        PotionEffect potionEffect2 = PotionEffectType.SLOW.createEffect(100, 100);
                         roundPlayers.getX().getPlayer().addPotionEffect(potionEffect2);
                         roundPlayers.getY().getPlayer().addPotionEffect(potionEffect2);
 
@@ -161,7 +161,7 @@ public class Sumo extends Event {
                         Location player1 = roundPlayers.getX().getPlayer().getLocation();
                         Location player2 = roundPlayers.getY().getPlayer().getLocation();
 
-                        if(player1.getY() <= map.getFallLevel()) {
+                        if(player1.getY() <= map.getFallLevel() || !roundPlayers.getX().getPlayer().isOnline()) {
                             players.remove(roundPlayers.getX());
                             addPlayer(roundPlayers.getX());
                             roundPlayers.getX().getPlayer().teleport(map.getSpawnLocation());
@@ -170,7 +170,7 @@ public class Sumo extends Event {
                             roundPlayers.setY(null);
                         }
 
-                        if(player2.getY() <= map.getFallLevel()) {
+                        if(player2.getY() <= map.getFallLevel() || !roundPlayers.getY().getPlayer().isOnline()) {
                             players.remove(roundPlayers.getY());
                             addPlayer(roundPlayers.getY());
                             roundPlayers.getY().getPlayer().teleport(map.getSpawnLocation());
@@ -197,7 +197,7 @@ public class Sumo extends Event {
     }
 
     private void updateBoard() {
-        List<PlayerData> allPlayers = new ArrayList<PlayerData>(players);
+        List<PlayerData> allPlayers = new ArrayList<>(players);
         allPlayers.addAll(spectators);
         PlayerData playerX = roundPlayers.getX();
         PlayerData playerY = roundPlayers.getY();
