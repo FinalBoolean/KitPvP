@@ -1,18 +1,23 @@
 package cf.strafe;
 
 import cf.strafe.command.*;
+import cf.strafe.config.Config;
 import cf.strafe.data.DataManager;
 import cf.strafe.event.EventManager;
+import cf.strafe.event.map.MapManager;
+import cf.strafe.event.map.SumoMap;
+import cf.strafe.gui.KitGui;
 import cf.strafe.kit.KitManager;
 import cf.strafe.listener.DataListener;
-import cf.strafe.managers.BroadcastManager;
-import lombok.Getter;
-import cf.strafe.config.Config;
-import cf.strafe.gui.KitGui;
 import cf.strafe.listener.PlayerListener;
+import cf.strafe.managers.BroadcastManager;
 import cf.strafe.managers.ScoreboardManager;
+import cf.strafe.utils.LocationUtil;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -20,6 +25,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -61,6 +67,7 @@ public enum KitPvP {
         this.eventManager = new EventManager();
         scoreboard(plugin);
         handleBukkit(plugin);
+        loadArenas();
         Bukkit.getOnlinePlayers().forEach(player -> dataManager.inject(player));
         teamManager = Bukkit.getScoreboardManager().getMainScoreboard();
         registerHealthBar();
@@ -68,11 +75,64 @@ public enum KitPvP {
 
 
 
+    }
+    public void loadArenas() {
+        File file = new File(plugin.getDataFolder(), "SumoArenas.yml");
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } else {
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+            for (String key : config.getKeys(false)) {
+                String arenaName = config.getString(key + ".name");
+                Location spawnLocation = config.getLocation(key + ".spawnLocation");
+                Location fight1 = config.getLocation(key + ".fight1");
+                Location fight2 = config.getLocation(key + ".fight2");
+                int fallLevel = config.getInt(key + ".fallLevel");
+                MapManager.getSumoMaps().add(new SumoMap(arenaName, spawnLocation, fight1, fight2, fallLevel));
+                System.out.println("Loading Arena " + arenaName);
+            }
+        }
+
+    }
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public void saveSumoArenas() {
+        File file = new File(plugin.getDataFolder(), "SumoArenas.yml");
+
+        if (!file.exists()) {
+
+
+            try {
+                file.createNewFile();
+            } catch (IOException ignored) {
+
+            }
+
+        }
+        YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
+        for (SumoMap arena : MapManager.getSumoMaps()) {
+            yml.set(arena.getMapName() + ".spawnLocation", arena.getSpawnLocation());
+            yml.set(arena.getMapName() + ".fight1", arena.getFightLocation1());
+            yml.set(arena.getMapName() + ".fight2", arena.getFightLocation2());
+            yml.set(arena.getMapName() + ".fallLevel", arena.getFallLevel());
+            yml.set(arena.getMapName() + ".name", arena.getMapName());
+        }
+
+        try {
+            yml.save(file);
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
 
     }
 
     public void registerNameTag() {
-        if(teamManager.getTeam("vanish") != null) {
+        if (teamManager.getTeam("vanish") != null) {
             teamManager.getTeam("vanish").unregister();
         }
         Team t = teamManager.registerNewTeam("vanish");
@@ -100,6 +160,7 @@ public enum KitPvP {
      */
     public void onDisable(Main plugin) {
         Bukkit.getOnlinePlayers().forEach(player -> dataManager.uninject(player));
+        saveSumoArenas();
     }
 
     public void handleBukkit(Main plugin) {
@@ -113,6 +174,8 @@ public enum KitPvP {
         plugin.getCommand("staffchat").setExecutor(new StaffChatCommand());
         plugin.getCommand("givelevel").setExecutor(new GiveLevelCommand());
         plugin.getCommand("stats").setExecutor(new StatsCommand());
+        plugin.getCommand("sumo").setExecutor(new SumoCommand());
+        plugin.getCommand("event").setExecutor(new EventCommand());
     }
 
 

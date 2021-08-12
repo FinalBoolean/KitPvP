@@ -1,10 +1,12 @@
 package cf.strafe.event;
 
+import cf.strafe.KitPvP;
 import cf.strafe.data.PlayerData;
 import cf.strafe.utils.ColorUtil;
 import lombok.Getter;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.event.Listener;
+import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
 
@@ -17,8 +19,6 @@ public abstract class Event {
 
     public State state;
     public int gameTime, maxPlayers;
-
-    public Event() { }
 
     public abstract void update();
 
@@ -40,10 +40,16 @@ public abstract class Event {
         if (players.contains(player)) {
             players.remove(player);
             player.getPlayer().sendMessage(ColorUtil.translate("&cYou have left the event!"));
+            for(PotionEffect effect : player.getPlayer().getActivePotionEffects()) player.getPlayer().removePotionEffect(effect.getType());
+            player.getPlayer().teleport(player.getPlayer().getWorld().getSpawnLocation());
+            player.giveKit(KitPvP.INSTANCE.getKitManager().getKits().get(0));
         }
         if (spectators.contains(player)) {
             spectators.remove(player);
             player.getPlayer().sendMessage(ColorUtil.translate("&cYou have left the event!"));
+            for(PotionEffect effect : player.getPlayer().getActivePotionEffects()) player.getPlayer().removePotionEffect(effect.getType());
+            player.getPlayer().teleport(player.getPlayer().getWorld().getSpawnLocation());
+            player.giveKit(KitPvP.INSTANCE.getKitManager().getKits().get(0));
         }
     }
 

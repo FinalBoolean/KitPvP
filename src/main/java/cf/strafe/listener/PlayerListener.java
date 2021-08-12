@@ -105,7 +105,7 @@ public class PlayerListener implements Listener {
             }, 5L);
 
             killerUser.getPlayer().setLevel(killerUser.getLevel());
-            killerUser.getPlayer().setExp((float) (killerUser.getXp() / killerUser.getNeededXp()));
+            killerUser.getPlayer().setExp((float) Math.min(1, killerUser.getXp() / killerUser.getNeededXp()));
 
             event.setDeathMessage(ColorUtil.translate(Config.KILL_MESSAGE.replace("%killer%", killer.getName()).replace("%victim%", killed.getName())));
         }

@@ -3,7 +3,10 @@ package cf.strafe.event;
 import cf.strafe.KitPvP;
 import cf.strafe.data.PlayerData;
 import cf.strafe.event.events.Sumo;
+import cf.strafe.event.map.SumoMap;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -20,11 +23,28 @@ public class EventManager {
         initialize();
     }
 
-    public void createEvent(Event.Type e, PlayerData host) {
+    public void createSumoEvent(Event.Type e, PlayerData host, SumoMap sumoMap) {
         this.host = host;
         if (e == Event.Type.SUMO) {
-            event = new Sumo();
+            event = new Sumo(sumoMap, host);
         }
+    }
+
+    public void deleteEvent(String reason) {
+        if (event != null) {
+            if (event.getPlayers() != null) {
+                for (PlayerData player : event.getPlayers()) {
+                    event.removePlayer(player);
+                }
+                for(PlayerData players : event.getSpectators()) {
+                    event.removePlayer(players);
+                }
+            }
+        }
+        Bukkit.broadcastMessage(ChatColor.RED + "The event was cancelled. Reason: " + reason);
+        event = null;
+        eventType = null;
+        host = null;
     }
 
     public void deleteEvent() {
@@ -32,6 +52,9 @@ public class EventManager {
             if (event.getPlayers() != null) {
                 for (PlayerData player : event.getPlayers()) {
                     event.removePlayer(player);
+                }
+                for(PlayerData players : event.getSpectators()) {
+                    event.removePlayer(players);
                 }
             }
         }
@@ -41,7 +64,7 @@ public class EventManager {
     }
 
     private void initialize() {
-        BukkitTask task = new BukkitRunnable() {
+        new BukkitRunnable() {
             public void run() {
                 if (event != null) {
                     event.update();

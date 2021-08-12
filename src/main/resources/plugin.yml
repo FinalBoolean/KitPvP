@@ -22,3 +22,7 @@ commands:
     aliases: [gl]
   stats:
     description: Allows the player to see a players stats
+  event:
+    description: ALlows the player to create events
+  sumo:
+    description: ALlows staff to create sumo events

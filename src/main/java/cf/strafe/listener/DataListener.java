@@ -20,6 +20,9 @@ public class DataListener implements Listener {
     public void onLeave(PlayerQuitEvent event) {
         event.setQuitMessage("");
         PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(event.getPlayer().getUniqueId());
+        if(KitPvP.INSTANCE.getEventManager().event != null) {
+            KitPvP.INSTANCE.getEventManager().event.removePlayer(data);
+        }
         //KitPvP.INSTANCE.getScoreboardManager().remove(event.getPlayer());
         if(data.isVanished()) {
             KitPvP.INSTANCE.getTeamManager().getTeam("vanish").removePlayer(data.getPlayer());
