@@ -11,9 +11,16 @@ import cf.strafe.listener.DataListener;
 import cf.strafe.listener.PlayerListener;
 import cf.strafe.managers.BroadcastManager;
 import cf.strafe.managers.ScoreboardManager;
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketEvent;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -50,6 +57,7 @@ public enum KitPvP {
         this.plugin = plugin;
     }
 
+
     /**
      * Called when the plugin is enabled
      */
@@ -68,6 +76,30 @@ public enum KitPvP {
         registerHealthBar();
         registerNameTag();
 
+        ProtocolLibrary.getProtocolManager().addPacketListener(
+                new PacketAdapter(plugin, ListenerPriority.NORMAL, PacketType.Play.Server.NAMED_SOUND_EFFECT) {
+                    @Override
+                    public void onPacketSending(PacketEvent event) {
+                        if (event.getPacketType() == PacketType.Play.Server.NAMED_SOUND_EFFECT) {
+                            Sound sound = event.getPacket().getSoundEffects().read(0);
+                            if (sound.name().toLowerCase().contains("entity_player_attack_strong") ||
+                                    sound.name().toLowerCase().contains("entity_player_attack_sweep") ||
+                                    sound.name().toLowerCase().contains("entity_player_attack_nodamage") ||
+                                    sound.name().toLowerCase().contains("entity_player_attack_knockback") ||
+                                    sound.name().toLowerCase().contains("entity_player_attack_crit") ||
+                                    sound.name().toLowerCase().contains("entity_player_attack_weak")) {
+                                event.setCancelled(true); //The sound will no longer be played
+                            }
+                        }
+                        if(event.getPacketType() == PacketType.Play.Server.WORLD_PARTICLES) {
+                            Particle particle = event.getPacket().getNewParticles().read(0).getParticle();
+                            Bukkit.broadcast(particle.name(), "wizardpro.core");
+                            if (particle == Particle.DAMAGE_INDICATOR || particle == Particle.SWEEP_ATTACK) {
+                                event.setCancelled(true);
+                            }
+                        }
+                    }
+                });
 
 
     }

@@ -125,23 +125,30 @@ public class MapManager {
         }
     }
     private void saveFFA() {
-        File file = new File(KitPvP.INSTANCE.getPlugin().getDataFolder(), "SumoArenas.yml");
+        File file = new File(KitPvP.INSTANCE.getPlugin().getDataFolder(), "FFAArenas.yml");
+
         if (!file.exists()) {
+
+
             try {
                 file.createNewFile();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            } catch (IOException ignored) {
+
             }
-        } else {
-            YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
-            for (String key : config.getKeys(false)) {
-                String arenaName = config.getString(key + ".name");
-                Location spawnLocation = config.getLocation(key + ".spawnLocation");
-                Location fight = config.getLocation(key + ".fight");
-                MapManager.getFfaMaps().add(new FFAMap(arenaName, spawnLocation, fight));
-                System.out.println("Loading Arena " + arenaName);
-            }
+
+        }
+        YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
+        for (FFAMap arena : MapManager.getFfaMaps()) {
+            yml.set(arena.getMapName() + ".spawnLocation", arena.getSpawnLocation());
+            yml.set(arena.getMapName() + ".fight", arena.getFightLocation());
+            yml.set(arena.getMapName() + ".name", arena.getMapName());
+        }
+
+        try {
+            yml.save(file);
+        } catch (IOException e) {
+
+            e.printStackTrace();
         }
     }
 }
