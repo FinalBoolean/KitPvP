@@ -2,6 +2,7 @@ package cf.strafe.data;
 
 import lombok.Getter;
 import cf.strafe.KitPvP;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -28,6 +29,7 @@ public class DataManager {
             if(data.isVanished() && !player.hasPermission("kitpvp.staff")) {
                 player.hidePlayer(data.getPlayer());
             }
+            player.setPlayerListName(player.getDisplayName());
         }
         KitPvP.INSTANCE.getExecutor().execute(() -> {
             PlayerData duelUser = new PlayerData(player);
@@ -36,6 +38,8 @@ public class DataManager {
             duelUser.giveKit(KitPvP.INSTANCE.getKitManager().getKits().get(0));
             KitPvP.INSTANCE.getScoreboardManager().create(player);
         });
+
+
 
     }
 

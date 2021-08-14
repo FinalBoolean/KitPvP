@@ -33,6 +33,7 @@ public class ScoreboardManager {
             PlayerData pData = entry.getKey();
             FastBoard board = entry.getValue();
 
+            entry.getKey().getPlayer().setPlayerListName(entry.getKey().getPlayer().getDisplayName());
             Event event;
             boolean inEvent = false;
             if (KitPvP.INSTANCE.getEventManager().event != null) {
