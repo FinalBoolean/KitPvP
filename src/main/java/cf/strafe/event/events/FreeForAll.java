@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,13 @@ public class FreeForAll extends Event {
     @Override
     public void onDeath(PlayerData playerData) {
         players.remove(playerData);
-        addPlayer(playerData);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                addPlayer(playerData);
+            }
+        }.runTaskLater(KitPvP.INSTANCE.getPlugin(), 5);
+
         super.onDeath(playerData);
     }
 

@@ -23,7 +23,6 @@ public class StatsCommand implements CommandExecutor {
                     player.sendMessage(ChatColor.GREEN +"level: " + data.getLevel());
                     player.sendMessage(ChatColor.GREEN +"kills: " + data.getKills());
                     player.sendMessage(ChatColor.GREEN +"killStreak: " + data.getKillStreak());
-                    player.sendMessage(ChatColor.GREEN +"kills: " + data.getKills());
                     player.sendMessage(ChatColor.GREEN +"deaths: " + data.getDeaths());
                 } else {
                     player.sendMessage(ChatColor.RED + "Player is not online");
@@ -35,7 +34,6 @@ public class StatsCommand implements CommandExecutor {
                 player.sendMessage(ChatColor.GREEN +"level: " + data.getLevel());
                 player.sendMessage(ChatColor.GREEN +"kills: " + data.getKills());
                 player.sendMessage(ChatColor.GREEN +"killStreak: " + data.getKillStreak());
-                player.sendMessage(ChatColor.GREEN +"kills: " + data.getKills());
                 player.sendMessage(ChatColor.GREEN +"deaths: " + data.getDeaths());
             }
         }

@@ -1,6 +1,7 @@
 package cf.strafe.kit;
 
 import cf.strafe.KitPvP;
+import cf.strafe.kit.abilities.archer.MachineGun;
 import cf.strafe.kit.abilities.enderman.Recall;
 import cf.strafe.kit.abilities.knight.BattleStrength;
 import cf.strafe.kit.abilities.ninja.Dash;
@@ -65,10 +66,11 @@ public class KitManager {
         List<ItemStack> items = new ArrayList<>();
         ItemStack sword = createItem(Material.STONE_SWORD, "&6Archer Sword", "&aEpik weapon for slicing foes.");
         ItemStack bow = createInfiniteBow(Material.BOW, "&6Archer Bow", "&1Bow");
-        ItemStack arrow = createItem(Material.ARROW, "&aArrow");
+        ItemStack arrow = createItem(Material.ARROW, "&aMachine gun", "&aFire a barrage of arrows");
         items.add(sword);
         items.add(bow);
         items.add(arrow);
+        KitPvP.INSTANCE.getPlugin().getServer().getPluginManager().registerEvents(new MachineGun(arrow), KitPvP.INSTANCE.getPlugin());
 
         List<ItemStack> armor = new ArrayList<>();
         armor.add(createItem(Material.CHAINMAIL_BOOTS, "&aChain Boots"));
