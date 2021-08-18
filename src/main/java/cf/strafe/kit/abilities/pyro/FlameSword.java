@@ -19,7 +19,7 @@ public class FlameSword extends Ability {
 
     @EventHandler
     public void onRightClick(PlayerInteractEvent event) {
-        if (event.getAction() == Action.RIGHT_CLICK_AIR) {
+        if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (isHoldingItem(event)) {
                 PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(event.getPlayer().getUniqueId());
                 if (data.getAbilityCD().hasCooldown(10)) {
