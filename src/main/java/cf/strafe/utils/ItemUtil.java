@@ -42,4 +42,19 @@ public class ItemUtil {
         return item;
     }
 
+    public ItemStack createItem(final Material material, int amount) {
+        final ItemStack item = new ItemStack(material, 1);
+        final ItemMeta meta = item.getItemMeta();
+
+        // Set the name of the item
+        assert meta != null;
+
+        // Set the lore of the item
+        meta.setUnbreakable(true);
+
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
 }

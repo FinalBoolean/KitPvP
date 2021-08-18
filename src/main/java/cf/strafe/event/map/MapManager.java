@@ -1,9 +1,12 @@
 package cf.strafe.event.map;
 
 import cf.strafe.KitPvP;
+import cf.strafe.event.events.Skywars;
+import cf.strafe.event.map.skywars.ChestLocation;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +16,7 @@ import java.util.ArrayList;
 public class MapManager {
     private final ArrayList<SumoMap> sumoMaps = new ArrayList<>();
     private final ArrayList<FFAMap> ffaMaps = new ArrayList<>();
+    private final ArrayList<SkywarsMap> skywarsMap = new ArrayList<>();
 
 
     public static ArrayList<SumoMap> getSumoMaps() {
@@ -23,14 +27,21 @@ public class MapManager {
         return ffaMaps;
     }
 
+    public static ArrayList<SkywarsMap> getSkywarsMap() {
+        return skywarsMap;
+    }
+
+
     public void saveArenas() {
         saveSumo();
         saveFFA();
+        saveSkywars();
     }
 
     public void loadArenas() {
         loadSumo();
         loadFFa();
+        loadSkywars();
     }
 
     public SumoMap getSumoMap(String name) {
@@ -49,6 +60,65 @@ public class MapManager {
             }
         }
         return null;
+    }
+
+
+    private void loadSkywars() {
+        File file = new File(KitPvP.INSTANCE.getPlugin().getDataFolder(), "SkywarsMaps.yml");
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } else {
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+            for (String key : config.getKeys(true)) {
+                System.out.println(key);
+            }
+        }
+    }
+
+    private void saveSkywars() {
+        File file = new File(KitPvP.INSTANCE.getPlugin().getDataFolder(), "SkywarsMaps.yml");
+
+        if(!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException ignored) {
+
+            }
+        }
+
+        YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
+        for(SkywarsMap skywarsMap : MapManager.getSkywarsMap()) {
+            yml.set(skywarsMap.getMapName() + ".spawn", skywarsMap.getSpectatorLocation());
+            for(int i = 0; i < skywarsMap.getSpawnLocations().size(); i++) {
+                Location location = skywarsMap.getSpawnLocations().get(i);
+                yml.set(skywarsMap.getMapName() + ".spawnLocations." + i + ".id", i);
+                yml.set(skywarsMap.getMapName() + ".spawnLocations." + i + ".location", location);
+            }
+            /*
+            Mapping this is going to be difficult
+             */
+            for(int i = 0; i < skywarsMap.getChestLocations().size(); i++) {
+                ChestLocation chestLocation = skywarsMap.getChestLocations().get(i);
+                yml.set(skywarsMap.getMapName() + ".chestLocations." + i + ".id", i);
+                yml.set(skywarsMap.getMapName() + ".chestLocations." + i + ".location", chestLocation.getLocation());
+
+                //FUCKING KILL ME
+
+                for(int o = 0; i < chestLocation.getInventory().length; o++) {
+                    ItemStack itemStack = chestLocation.getInventory()[o];
+                    yml.set(skywarsMap.getMapName() + ".chestLocations." + i + ".items." + o, itemStack);
+                }
+            }
+            /*
+            Alright were done
+             */
+            yml.set(skywarsMap.getMapName() + ".name", skywarsMap.getMapName());
+        }
     }
 
     private void saveSumo() {
