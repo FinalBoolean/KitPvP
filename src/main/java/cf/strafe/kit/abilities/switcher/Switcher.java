@@ -1,7 +1,6 @@
 package cf.strafe.kit.abilities.switcher;
 
 import cf.strafe.KitPvP;
-import cf.strafe.kit.Kit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -14,8 +13,8 @@ public class Switcher implements Listener {
 
     @EventHandler
     public void onSnowballHit(EntityDamageByEntityEvent e) {
-        if(!e.isCancelled()) {
-            Entity victim = (Player) e.getEntity();
+        if (!e.isCancelled()) {
+            Entity victim = e.getEntity();
             if (e.getEntity() instanceof Player) {
                 if (e.getDamager() instanceof Snowball) {
                     Snowball snowball = (Snowball) e.getDamager();

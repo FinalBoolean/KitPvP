@@ -3,7 +3,6 @@ package cf.strafe.command;
 import cf.strafe.KitPvP;
 import cf.strafe.data.PlayerData;
 import cf.strafe.event.Event;
-import cf.strafe.event.events.Sumo;
 import cf.strafe.event.map.FFAMap;
 import cf.strafe.event.map.MapManager;
 import cf.strafe.event.map.SumoMap;
@@ -13,19 +12,18 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class EventCommand implements CommandExecutor
-{
+public class EventCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             Player player = ((Player) sender).getPlayer();
 
-            if(player.hasPermission("kitpvp.events")) {
-                if(args.length > 1) {
+            if (player.hasPermission("kitpvp.events")) {
+                if (args.length > 1) {
                     switch (args[0].toLowerCase()) {
                         case "start": {
-                            if(args.length > 2) {
-                                if(KitPvP.INSTANCE.getEventManager().event == null) {
+                            if (args.length > 2) {
+                                if (KitPvP.INSTANCE.getEventManager().getEvent() == null) {
                                     switch (args[1]) {
                                         case "sumo": {
                                             SumoMap sumoMap = MapManager.getSumoMap(args[2]);
@@ -65,13 +63,13 @@ public class EventCommand implements CommandExecutor
                             break;
                         }
                         case "stop": {
-                            if(args.length > 2) {
+                            if (args.length > 2) {
                                 PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
-                                if(KitPvP.INSTANCE.getEventManager().host ==  data) {
+                                if (KitPvP.INSTANCE.getEventManager().getHost() == data) {
 
                                     KitPvP.INSTANCE.getEventManager().deleteEvent(args[2]);
                                 } else {
-                                    player.sendMessage(ChatColor.RED  + "You are not the host of that event!");
+                                    player.sendMessage(ChatColor.RED + "You are not the host of that event!");
                                 }
                             } else {
                                 player.sendMessage(ChatColor.RED + "Usage: /event start [event] [map], /event stop [event] [reason]");

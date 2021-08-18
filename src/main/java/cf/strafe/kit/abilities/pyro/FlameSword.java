@@ -19,11 +19,11 @@ public class FlameSword extends Ability {
 
     @EventHandler
     public void onRightClick(PlayerInteractEvent event) {
-        if(event.getAction() == Action.RIGHT_CLICK_AIR) {
-            if(isHoldingItem(event)) {
+        if (event.getAction() == Action.RIGHT_CLICK_AIR) {
+            if (isHoldingItem(event)) {
                 PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(event.getPlayer().getUniqueId());
-                if(data.getAbilityCD().hasCooldown(10)) {
-                    if(event.getItem() != null) {
+                if (data.getAbilityCD().hasCooldown(10)) {
+                    if (event.getItem() != null) {
                         data.getPlayer().sendMessage(ChatColor.GREEN + "(!) You used FlameSword");
                         data.getPlayer().playSound(data.getPlayer().getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1);
                         event.getItem().addEnchantment(Enchantment.FIRE_ASPECT, 2);

@@ -18,9 +18,9 @@ public class SumoCommand implements CommandExecutor {
             if (player.hasPermission("kitpvp.staff")) {
                 if (args.length == 1) {
                     if (args[0].equalsIgnoreCase("join")) {
-                        if(KitPvP.INSTANCE.getEventManager().event != null) {
+                        if (KitPvP.INSTANCE.getEventManager().getEvent() != null) {
                             PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
-                            KitPvP.INSTANCE.getEventManager().event.addPlayer(data);
+                            KitPvP.INSTANCE.getEventManager().getEvent().addPlayer(data);
                             player.sendMessage(ChatColor.GREEN + "You joined the event");
                         } else {
                             player.sendMessage(ChatColor.RED + "No event is on");
@@ -38,7 +38,7 @@ public class SumoCommand implements CommandExecutor {
 
                         case "spawn": {
                             SumoMap sumoMap = MapManager.getSumoMap(args[1]);
-                            if(sumoMap != null) {
+                            if (sumoMap != null) {
                                 sumoMap.setSpawnLocation(player.getLocation());
                                 player.sendMessage(ChatColor.GREEN + "Set spawn");
                             } else {
@@ -49,7 +49,7 @@ public class SumoCommand implements CommandExecutor {
                         }
                         case "fight1": {
                             SumoMap sumoMap = MapManager.getSumoMap(args[1]);
-                            if(sumoMap != null) {
+                            if (sumoMap != null) {
                                 sumoMap.setFightLocation1(player.getLocation());
                                 player.sendMessage(ChatColor.GREEN + "Set fight 1");
                             } else {
@@ -59,7 +59,7 @@ public class SumoCommand implements CommandExecutor {
                         }
                         case "fight2": {
                             SumoMap sumoMap = MapManager.getSumoMap(args[1]);
-                            if(sumoMap != null) {
+                            if (sumoMap != null) {
                                 player.sendMessage(ChatColor.GREEN + "Set fight 2");
                                 sumoMap.setFightLocation2(player.getLocation());
                             } else {
@@ -69,7 +69,7 @@ public class SumoCommand implements CommandExecutor {
                         }
                         case "falllevel": {
                             SumoMap sumoMap = MapManager.getSumoMap(args[1]);
-                            if(sumoMap != null) {
+                            if (sumoMap != null) {
                                 player.sendMessage(ChatColor.GREEN + "Set fall level");
                                 sumoMap.setFallLevel(player.getLocation().getY());
                             } else {
@@ -78,9 +78,9 @@ public class SumoCommand implements CommandExecutor {
                             break;
                         }
                         case "join": {
-                            if(KitPvP.INSTANCE.getEventManager().event != null) {
+                            if (KitPvP.INSTANCE.getEventManager().getEvent() != null) {
                                 PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
-                                KitPvP.INSTANCE.getEventManager().event.addPlayer(data);
+                                KitPvP.INSTANCE.getEventManager().getEvent().addPlayer(data);
                                 player.sendMessage(ChatColor.GREEN + "You joined the event");
                             } else {
                                 player.sendMessage(ChatColor.RED + "No event is on");
@@ -88,9 +88,9 @@ public class SumoCommand implements CommandExecutor {
                             break;
                         }
                         case "leave": {
-                            if(KitPvP.INSTANCE.getEventManager().event != null) {
+                            if (KitPvP.INSTANCE.getEventManager().getEvent() != null) {
                                 PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
-                                KitPvP.INSTANCE.getEventManager().event.removePlayer(data);
+                                KitPvP.INSTANCE.getEventManager().getEvent().removePlayer(data);
                                 player.sendMessage(ChatColor.GREEN + "You left the event");
                             } else {
                                 player.sendMessage(ChatColor.RED + "No event is on");
@@ -102,19 +102,19 @@ public class SumoCommand implements CommandExecutor {
                     player.sendMessage(ChatColor.RED + "Usage: /sumo create [name], sumo spawn [name], sumo fight1 [name], sumo fight2 [name], sumo fallLevel");
                 }
             } else {
-                if(args.length > 0) {
-                    if(args[0].equalsIgnoreCase("join")) {
-                        if(KitPvP.INSTANCE.getEventManager().event != null) {
+                if (args.length > 0) {
+                    if (args[0].equalsIgnoreCase("join")) {
+                        if (KitPvP.INSTANCE.getEventManager().getEvent() != null) {
                             PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
-                            KitPvP.INSTANCE.getEventManager().event.addPlayer(data);
+                            KitPvP.INSTANCE.getEventManager().getEvent().addPlayer(data);
                             player.sendMessage(ChatColor.GREEN + "You joined the event");
                         } else {
                             player.sendMessage(ChatColor.RED + "No event is on");
                         }
-                    } else if(args[0].equalsIgnoreCase("leave")) {
-                        if(KitPvP.INSTANCE.getEventManager().event != null) {
+                    } else if (args[0].equalsIgnoreCase("leave")) {
+                        if (KitPvP.INSTANCE.getEventManager().getEvent() != null) {
                             PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
-                            KitPvP.INSTANCE.getEventManager().event.removePlayer(data);
+                            KitPvP.INSTANCE.getEventManager().getEvent().removePlayer(data);
                             player.sendMessage(ChatColor.GREEN + "You left the event");
                         } else {
                             player.sendMessage(ChatColor.RED + "No event is on");

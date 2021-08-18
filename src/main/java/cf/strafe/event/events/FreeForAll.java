@@ -4,18 +4,12 @@ import cf.strafe.KitPvP;
 import cf.strafe.data.PlayerData;
 import cf.strafe.event.Event;
 import cf.strafe.event.map.FFAMap;
-import cf.strafe.event.map.SumoMap;
 import cf.strafe.utils.ColorUtil;
-import cf.strafe.utils.Pair;
 import cf.strafe.utils.scoreboard.FastBoard;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -81,13 +75,18 @@ public class FreeForAll extends Event {
 
             case INGAME: {
                 gameTime++;
-                if(gameTime == 1) {
+                if (gameTime == 1) {
                     for (PlayerData data : players) {
                         data.getPlayer().teleport(map.getFightLocation());
                         data.getPlayer().sendMessage(ColorUtil.translate("&6[Event] &fFree for all!"));
+                        if (data.getLastKit() == null) {
+                            data.giveKit(KitPvP.INSTANCE.getKitManager().getKits().get(0));
+                        } else {
+                            data.giveKit(data.getLastKit());
+                        }
                     }
                 }
-                if(players.size() < 2) {
+                if (players.size() < 2) {
                     Bukkit.broadcastMessage(ColorUtil.translate("&6[Event] &f" + players.get(0).getPlayer().getName() + " &7has won the &fFFA Event&7!"));
                     state = State.END;
                 }

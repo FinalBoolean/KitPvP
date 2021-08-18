@@ -28,3 +28,5 @@ commands:
     description: ALlows staff to create sumo events
   ffa:
     description: Allows staff to create ffa events
+  spawn:
+    description: Allows the player to go to spawn

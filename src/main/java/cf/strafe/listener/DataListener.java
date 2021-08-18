@@ -1,7 +1,7 @@
 package cf.strafe.listener;
 
-import cf.strafe.data.PlayerData;
 import cf.strafe.KitPvP;
+import cf.strafe.data.PlayerData;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -20,11 +20,11 @@ public class DataListener implements Listener {
     public void onLeave(PlayerQuitEvent event) {
         event.setQuitMessage("");
         PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(event.getPlayer().getUniqueId());
-        if(KitPvP.INSTANCE.getEventManager().event != null) {
-            KitPvP.INSTANCE.getEventManager().event.removePlayer(data);
+        if (KitPvP.INSTANCE.getEventManager().getEvent() != null) {
+            KitPvP.INSTANCE.getEventManager().getEvent().removePlayer(data);
         }
         //KitPvP.INSTANCE.getScoreboardManager().remove(event.getPlayer());
-        if(data.isVanished()) {
+        if (data.isVanished()) {
             KitPvP.INSTANCE.getTeamManager().getTeam("vanish").removePlayer(data.getPlayer());
         }
         KitPvP.INSTANCE.getDataManager().uninject(event.getPlayer());

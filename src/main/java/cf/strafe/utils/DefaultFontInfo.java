@@ -71,12 +71,20 @@ public enum DefaultFontInfo {
             'a',
             4);
 
-    private char character;
-    private int length;
+    private final char character;
+    private final int length;
 
     DefaultFontInfo(char character, int length) {
         this.character = character;
         this.length = length;
+    }
+
+    public static DefaultFontInfo getDefaultFontInfo(char c) {
+        for (DefaultFontInfo dFI : DefaultFontInfo.values()) {
+            if (dFI.getCharacter() == c)
+                return dFI;
+        }
+        return DefaultFontInfo.DEFAULT;
     }
 
     public char getCharacter() {
@@ -91,14 +99,6 @@ public enum DefaultFontInfo {
         if (this == DefaultFontInfo.SPACE)
             return this.getLength();
         return this.length + 1;
-    }
-
-    public static DefaultFontInfo getDefaultFontInfo(char c) {
-        for (DefaultFontInfo dFI : DefaultFontInfo.values()) {
-            if (dFI.getCharacter() == c)
-                return dFI;
-        }
-        return DefaultFontInfo.DEFAULT;
     }
 
 }

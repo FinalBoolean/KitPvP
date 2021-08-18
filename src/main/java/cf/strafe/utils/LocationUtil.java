@@ -52,7 +52,7 @@ public class LocationUtil {
         double z = jsonObject.get("z").getAsDouble();
         float yaw = jsonObject.get("yaw").getAsFloat();
         float pitch = jsonObject.get("pitch").getAsFloat();
-        World world   = Bukkit.getWorld(jsonObject.get("world").getAsString());
+        World world = Bukkit.getWorld(jsonObject.get("world").getAsString());
         return new Location(world, x, y, z, yaw, pitch);
     }
 }

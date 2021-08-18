@@ -12,8 +12,11 @@ public class MathUtil {
     public String getTimer(int number) {
         int seconds = number % 60;
         int minutes = Math.floorDiv(number, 60);
-        if (seconds >= 10) { return minutes + ":" + seconds; }
-        else { return minutes + ":0" + seconds; }
+        if (seconds >= 10) {
+            return minutes + ":" + seconds;
+        } else {
+            return minutes + ":0" + seconds;
+        }
     }
 
 }

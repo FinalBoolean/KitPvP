@@ -1,12 +1,9 @@
 package cf.strafe.data;
 
-import lombok.Getter;
 import cf.strafe.KitPvP;
-import org.bukkit.Bukkit;
+import lombok.Getter;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -25,8 +22,8 @@ public class DataManager {
     }
 
     public void inject(Player player) {
-        for(PlayerData data : users.values()) {
-            if(data.isVanished() && !player.hasPermission("kitpvp.staff")) {
+        for (PlayerData data : users.values()) {
+            if (data.isVanished() && !player.hasPermission("kitpvp.staff")) {
                 player.hidePlayer(data.getPlayer());
             }
             player.setPlayerListName(player.getDisplayName());
@@ -35,10 +32,8 @@ public class DataManager {
             PlayerData duelUser = new PlayerData(player);
             users.put(player.getUniqueId(), duelUser);
             duelUser.loadData();
-            duelUser.giveKit(KitPvP.INSTANCE.getKitManager().getKits().get(0));
             KitPvP.INSTANCE.getScoreboardManager().create(player);
         });
-
 
 
     }

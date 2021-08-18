@@ -13,7 +13,6 @@ public class FFAMap {
     private Location fightLocation;
 
 
-
     public FFAMap(String mapName, Location spawnLocation, Location fightLocation) {
         this.mapName = mapName;
         this.spawnLocation = spawnLocation;

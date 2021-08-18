@@ -19,9 +19,9 @@ public class FFACommand implements CommandExecutor {
 
                 if (args.length == 1) {
                     if (args[0].equalsIgnoreCase("join")) {
-                        if (KitPvP.INSTANCE.getEventManager().event != null) {
+                        if (KitPvP.INSTANCE.getEventManager().getEvent() != null) {
                             PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
-                            KitPvP.INSTANCE.getEventManager().event.addPlayer(data);
+                            KitPvP.INSTANCE.getEventManager().getEvent().addPlayer(data);
                             player.sendMessage(ChatColor.GREEN + "You joined the event");
                         } else {
                             player.sendMessage(ChatColor.RED + "No event is on");
@@ -59,9 +59,9 @@ public class FFACommand implements CommandExecutor {
                             break;
                         }
                         case "join": {
-                            if (KitPvP.INSTANCE.getEventManager().event != null) {
+                            if (KitPvP.INSTANCE.getEventManager().getEvent() != null) {
                                 PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
-                                KitPvP.INSTANCE.getEventManager().event.addPlayer(data);
+                                KitPvP.INSTANCE.getEventManager().getEvent().addPlayer(data);
                                 player.sendMessage(ChatColor.GREEN + "You joined the event");
                             } else {
                                 player.sendMessage(ChatColor.RED + "No event is on");
@@ -69,9 +69,9 @@ public class FFACommand implements CommandExecutor {
                             break;
                         }
                         case "leave": {
-                            if (KitPvP.INSTANCE.getEventManager().event != null) {
+                            if (KitPvP.INSTANCE.getEventManager().getEvent() != null) {
                                 PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
-                                KitPvP.INSTANCE.getEventManager().event.removePlayer(data);
+                                KitPvP.INSTANCE.getEventManager().getEvent().removePlayer(data);
                                 player.sendMessage(ChatColor.GREEN + "You left the event");
                             } else {
                                 player.sendMessage(ChatColor.RED + "No event is on");
@@ -85,17 +85,17 @@ public class FFACommand implements CommandExecutor {
             } else {
                 if (args.length > 0) {
                     if (args[0].equalsIgnoreCase("join")) {
-                        if (KitPvP.INSTANCE.getEventManager().event != null) {
+                        if (KitPvP.INSTANCE.getEventManager().getEvent() != null) {
                             PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
-                            KitPvP.INSTANCE.getEventManager().event.addPlayer(data);
+                            KitPvP.INSTANCE.getEventManager().getEvent().addPlayer(data);
                             player.sendMessage(ChatColor.GREEN + "You joined the event");
                         } else {
                             player.sendMessage(ChatColor.RED + "No event is on");
                         }
                     } else if (args[0].equalsIgnoreCase("leave")) {
-                        if (KitPvP.INSTANCE.getEventManager().event != null) {
+                        if (KitPvP.INSTANCE.getEventManager().getEvent() != null) {
                             PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
-                            KitPvP.INSTANCE.getEventManager().event.removePlayer(data);
+                            KitPvP.INSTANCE.getEventManager().getEvent().removePlayer(data);
                             player.sendMessage(ChatColor.GREEN + "You left the event");
                         } else {
                             player.sendMessage(ChatColor.RED + "No event is on");

@@ -1,8 +1,8 @@
 package cf.strafe.kit.abilities.enderman;
 
+import cf.strafe.KitPvP;
 import cf.strafe.data.PlayerData;
 import cf.strafe.kit.Ability;
-import cf.strafe.KitPvP;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;

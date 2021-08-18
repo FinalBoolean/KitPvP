@@ -6,7 +6,6 @@ import cf.strafe.data.PlayerData;
 import cf.strafe.event.Event;
 import cf.strafe.utils.ColorUtil;
 import cf.strafe.utils.scoreboard.FastBoard;
-import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -28,6 +27,7 @@ public class ScoreboardManager {
         }.runTaskTimerAsynchronously(KitPvP.INSTANCE.getPlugin(), 0, 2);
 
     }
+
     private void update() {
         for (Map.Entry<PlayerData, FastBoard> entry : boards.entrySet()) {
             PlayerData pData = entry.getKey();
@@ -36,12 +36,12 @@ public class ScoreboardManager {
             entry.getKey().getPlayer().setPlayerListName(entry.getKey().getPlayer().getDisplayName());
             Event event;
             boolean inEvent = false;
-            if (KitPvP.INSTANCE.getEventManager().event != null) {
-                event = KitPvP.INSTANCE.getEventManager().event;
-                if (KitPvP.INSTANCE.getEventManager().event.getPlayers().contains(pData)) {
+            if (KitPvP.INSTANCE.getEventManager().getEvent() != null) {
+                event = KitPvP.INSTANCE.getEventManager().getEvent();
+                if (KitPvP.INSTANCE.getEventManager().getEvent().getPlayers().contains(pData)) {
                     inEvent = true;
                 }
-                if (KitPvP.INSTANCE.getEventManager().event.getSpectators().contains(pData)) {
+                if (KitPvP.INSTANCE.getEventManager().getEvent().getSpectators().contains(pData)) {
                     inEvent = true;
                 }
             }
@@ -55,7 +55,7 @@ public class ScoreboardManager {
                 board.updateLine(4, ColorUtil.translate("&6Killstreak: &f" + pData.getKillStreak()));
                 board.updateLine(5, ColorUtil.translate("&6Progress: &f" + pData.getXp() + "/" + pData.getNeededXp()));
                 board.updateLine(6, "");
-                board.updateLine(7, "strafekits.minehut.gg");
+                board.updateLine(7, "strafekits.cf");
                 board.updateLine(8, ColorUtil.translate("&7&m------------------"));
             }
         }

@@ -1,7 +1,7 @@
 package cf.strafe.command;
 
-import cf.strafe.data.PlayerData;
 import cf.strafe.KitPvP;
+import cf.strafe.data.PlayerData;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

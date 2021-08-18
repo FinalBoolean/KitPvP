@@ -1,8 +1,10 @@
 package cf.strafe.config;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor @Getter
+@RequiredArgsConstructor
+@Getter
 public class ConfigValue {
     private final Object value;
     private final ValueType valueType;
@@ -29,6 +31,6 @@ public class ConfigValue {
     }
 
     public enum ValueType {
-        INTEGER, DOUBLE, LONG, STRING;
+        INTEGER, DOUBLE, LONG, STRING
     }
 }

@@ -5,9 +5,7 @@ import cf.strafe.data.PlayerData;
 import cf.strafe.utils.ColorUtil;
 import lombok.Getter;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
@@ -15,10 +13,9 @@ import java.util.ArrayList;
 @Getter
 public abstract class Event implements Listener {
 
+    public final ArrayList<PlayerData> players = new ArrayList<>();
+    public final ArrayList<PlayerData> spectators = new ArrayList<>();
     public PlayerData host;
-    public ArrayList<PlayerData> players = new ArrayList<>();
-    public ArrayList<PlayerData> spectators = new ArrayList<>();
-
     public State state;
     public int gameTime, maxPlayers;
 
@@ -50,14 +47,16 @@ public abstract class Event implements Listener {
         if (players.contains(player)) {
             players.remove(player);
             player.getPlayer().sendMessage(ColorUtil.translate("&cYou have left the event!"));
-            for(PotionEffect effect : player.getPlayer().getActivePotionEffects()) player.getPlayer().removePotionEffect(effect.getType());
+            for (PotionEffect effect : player.getPlayer().getActivePotionEffects())
+                player.getPlayer().removePotionEffect(effect.getType());
             player.getPlayer().teleport(player.getPlayer().getWorld().getSpawnLocation());
             player.giveKit(KitPvP.INSTANCE.getKitManager().getKits().get(0));
         }
         if (spectators.contains(player)) {
             spectators.remove(player);
             player.getPlayer().sendMessage(ColorUtil.translate("&cYou have left the event!"));
-            for(PotionEffect effect : player.getPlayer().getActivePotionEffects()) player.getPlayer().removePotionEffect(effect.getType());
+            for (PotionEffect effect : player.getPlayer().getActivePotionEffects())
+                player.getPlayer().removePotionEffect(effect.getType());
             player.getPlayer().teleport(player.getPlayer().getWorld().getSpawnLocation());
             player.giveKit(KitPvP.INSTANCE.getKitManager().getKits().get(0));
         }
@@ -72,7 +71,9 @@ public abstract class Event implements Listener {
         }
 
         public State next() {
-            if (values()[ordinal() + 1] == null) { return values()[0]; }
+            if (values()[ordinal() + 1] == null) {
+                return values()[0];
+            }
             return values()[ordinal() + 1];
         }
 

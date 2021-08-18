@@ -1,16 +1,20 @@
 package cf.strafe.data;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
 import cf.strafe.KitPvP;
 import cf.strafe.kit.Kit;
 import cf.strafe.utils.Cooldown;
+import cf.strafe.utils.ItemUtil;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.util.UUID;
@@ -18,18 +22,17 @@ import java.util.UUID;
 @Getter
 @Setter
 public class PlayerData {
+    public int recallTask, countDown;
     @Setter(AccessLevel.NONE)
     private UUID uuid;
     @Setter(AccessLevel.NONE)
     private Player player;
     private Kit lastKit;
-
     private int kills, deaths, level, killStreak, maxKillStreak, credits;
     private double xp, neededXp;
-    private boolean vanished, staffchat;
+    private boolean vanished, staffchat, spawn;
+    private BukkitTask task;
     private Location recallLocation;
-    public int recallTask, countDown;
-
     private Cooldown abilityCD = new Cooldown();
     private Cooldown chatCD = new Cooldown();
 
@@ -47,8 +50,16 @@ public class PlayerData {
                 players.hidePlayer(player);
             }
         }
-
     }
+
+    public void spawnPlayer() {
+        spawn = true;
+        player.getInventory().clear();
+        player.getInventory().setItem(0, ItemUtil.createItemWithName(Material.BOOK, "&eSelect Kit &f(Right Click)"));
+        player.getInventory().setItem(1, ItemUtil.createItemWithName(Material.GLOWSTONE_DUST, "&ePrevious Kit &f(Right Click)"));
+        player.getInventory().setItem(8, ItemUtil.createItemWithName(Material.ENDER_EYE, "&eEvents &f(Right Click)"));
+    }
+
 
     public void unvanish(PlayerData data) {
         Player player = data.getPlayer();
@@ -63,8 +74,8 @@ public class PlayerData {
         player.getInventory().setContents(kit.getItemContents());
         player.getInventory().setArmorContents(kit.getArmorContents());
         player.updateInventory();
-        setLastKit(kit);
         player.playSound(player.getLocation(), Sound.ENTITY_HORSE_SADDLE, 1, 1);
+
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -73,7 +84,7 @@ public class PlayerData {
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        final File player = new File(dir, getPlayer().getUniqueId().toString() + ".yml");
+        final File player = new File(dir, getPlayer().getUniqueId() + ".yml");
         if (!player.exists()) {
             try {
 
@@ -101,7 +112,7 @@ public class PlayerData {
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        final File player = new File(dir, getPlayer().getUniqueId().toString() + ".yml");
+        final File player = new File(dir, getPlayer().getUniqueId() + ".yml");
         if (!player.exists()) {
             try {
                 player.createNewFile();
@@ -125,4 +136,6 @@ public class PlayerData {
 
         }
     }
+
+
 }

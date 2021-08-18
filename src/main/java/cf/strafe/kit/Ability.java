@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 @Getter
 public abstract class Ability implements Listener {
     private final ItemStack itemName;
+
     public boolean isHoldingItem(PlayerEvent event) {
         return event.getPlayer().getInventory().getItemInMainHand().equals(itemName);
     }

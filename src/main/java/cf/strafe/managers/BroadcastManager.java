@@ -13,6 +13,7 @@ import java.util.List;
 
 public class BroadcastManager {
 
+    private final static int CENTER_PX = 154;
     private int counter;
 
     public BroadcastManager() {
@@ -39,7 +40,6 @@ public class BroadcastManager {
         }, 0, Config.delay);
     }
 
-    private final static int CENTER_PX = 154;
     public void sendCenteredMessage(Player player, String message) {
         if (message == null || message.equals(""))
             player.sendMessage("");
@@ -77,6 +77,6 @@ public class BroadcastManager {
             sb.append(" ");
             compensated += spaceLength;
         }
-        player.sendMessage(sb.toString() + message);
+        player.sendMessage(sb + message);
     }
 }

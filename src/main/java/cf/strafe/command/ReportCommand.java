@@ -27,7 +27,7 @@ public class ReportCommand implements CommandExecutor {
                         if (player.hasPermission("core.report")) {
 
                             player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                                    "&c" +p.getName() + " has reported " + victim.getName())
+                                    "&c" + p.getName() + " has reported " + victim.getName())
 
                                     + " for " + report);
 

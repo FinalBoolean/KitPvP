@@ -7,11 +7,9 @@ import cf.strafe.event.map.SumoMap;
 import cf.strafe.utils.ColorUtil;
 import cf.strafe.utils.Pair;
 import cf.strafe.utils.scoreboard.FastBoard;
-import lombok.Getter;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -23,10 +21,9 @@ import java.util.Random;
 
 public class Sumo extends Event {
 
-    public int round;
-
     private final Pair<PlayerData, PlayerData> roundPlayers = new Pair<>();
     private final SumoMap map;
+    public int round;
 
     public Sumo(SumoMap map, PlayerData host) {
         this.map = map;
@@ -86,7 +83,7 @@ public class Sumo extends Event {
                     while (randomPlayer == randomPlayer2 && players.size() > 1) {
                         randomPlayer2 = players.get(random.nextInt(players.size()));
                     }
-                    if(players.size() < 2) {
+                    if (players.size() < 2) {
                         Bukkit.broadcastMessage(ColorUtil.translate("&6[Event] &f" + players.get(0).getPlayer().getName() + " &7has won the &fSumo Event&7!"));
                         state = State.END;
                     }
@@ -121,7 +118,7 @@ public class Sumo extends Event {
                         roundPlayers.getY().getPlayer().sendMessage(roundMSG);
 
                     }
-                    if(players.size() < 2) {
+                    if (players.size() < 2) {
                         Bukkit.broadcastMessage(ColorUtil.translate("&6[Event] &f" + players.get(0).getPlayer().getName() + " &7has won the &fSumo Event&7!"));
 
                         state = State.END;
@@ -131,11 +128,11 @@ public class Sumo extends Event {
                         roundPlayers.getX().getPlayer().teleport(map.getFightLocation1());
                         roundPlayers.getY().getPlayer().teleport(map.getFightLocation2());
 
-                        for(PotionEffect loopEffectX : roundPlayers.getX().getPlayer().getActivePotionEffects()){
+                        for (PotionEffect loopEffectX : roundPlayers.getX().getPlayer().getActivePotionEffects()) {
                             roundPlayers.getX().getPlayer().removePotionEffect(loopEffectX.getType());
                         }
 
-                        for(PotionEffect loopEffectY : roundPlayers.getY().getPlayer().getActivePotionEffects()){
+                        for (PotionEffect loopEffectY : roundPlayers.getY().getPlayer().getActivePotionEffects()) {
                             roundPlayers.getY().getPlayer().removePotionEffect(loopEffectY.getType());
                         }
 
@@ -150,12 +147,12 @@ public class Sumo extends Event {
                         roundPlayers.getX().getPlayer().sendMessage(roundMSG);
                         roundPlayers.getY().getPlayer().sendMessage(roundMSG);
                     }
-                    if(gameTime == 0) {
+                    if (gameTime == 0) {
 
                         Location player1 = roundPlayers.getX().getPlayer().getLocation();
                         Location player2 = roundPlayers.getY().getPlayer().getLocation();
 
-                        if(player1.getY() <= map.getFallLevel() || !roundPlayers.getX().getPlayer().isOnline()) {
+                        if (player1.getY() <= map.getFallLevel() || !roundPlayers.getX().getPlayer().isOnline()) {
                             players.remove(roundPlayers.getX());
                             addPlayer(roundPlayers.getX());
                             roundPlayers.getX().getPlayer().teleport(map.getSpawnLocation());
@@ -164,7 +161,7 @@ public class Sumo extends Event {
                             roundPlayers.setY(null);
                         }
 
-                        if(player2.getY() <= map.getFallLevel() || !roundPlayers.getY().getPlayer().isOnline()) {
+                        if (player2.getY() <= map.getFallLevel() || !roundPlayers.getY().getPlayer().isOnline()) {
                             players.remove(roundPlayers.getY());
                             addPlayer(roundPlayers.getY());
                             roundPlayers.getY().getPlayer().teleport(map.getSpawnLocation());
@@ -181,7 +178,7 @@ public class Sumo extends Event {
             }
             case END: {
                 KitPvP.INSTANCE.getEventManager().deleteEvent();
-                for(PlayerData players : getSpectators()) {
+                for (PlayerData players : getSpectators()) {
                     removePlayer(players);
                 }
                 break;
@@ -207,7 +204,7 @@ public class Sumo extends Event {
             board.updateLine(3, ColorUtil.translate("&7&m------------------"));
             if (playerX != null && playerY != null) {
                 board.updateLine(4, ColorUtil.translate(playerX.getPlayer().getName() + " &evs &f" + playerY.getPlayer().getName()));
-            } else if(state == State.WAITING) {
+            } else if (state == State.WAITING) {
                 board.updateLine(4, ColorUtil.translate("&6Starting in: &f" + gameTime + "s"));
             } else {
                 board.updateLine(4, ColorUtil.translate("&eWaiting for players..."));

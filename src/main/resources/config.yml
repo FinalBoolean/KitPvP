@@ -1,6 +1,5 @@
 killMessage: '&b&lStrafe&e&lKits&7» &7%killer% slashed %victim% into pieces.'
 receiveKit: '&b&lStrafe&e&lKits&7» You have received %kit%'
-
 chat-delay: 1
 broadcast-delay: 6000
 announcements:

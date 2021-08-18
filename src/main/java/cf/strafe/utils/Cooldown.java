@@ -1,6 +1,7 @@
 package cf.strafe.utils;
 
 import lombok.Getter;
+
 @Getter
 public class Cooldown {
     private long cooldown;
@@ -8,7 +9,7 @@ public class Cooldown {
 
     public boolean hasCooldown(long seconds) {
         this.cooldown = seconds;
-        if(time == 0 || getSeconds() < 1) {
+        if (time == 0 || getSeconds() < 1) {
             time = System.currentTimeMillis();
             return true;
         }

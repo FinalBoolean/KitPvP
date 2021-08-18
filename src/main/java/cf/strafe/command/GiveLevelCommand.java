@@ -12,12 +12,12 @@ import org.bukkit.entity.Player;
 public class GiveLevelCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             Player player = ((Player) sender).getPlayer();
-            if(player.hasPermission("kitpvp.admin")) {
-                if(args.length > 0) {
-                    if(args[0].equalsIgnoreCase("give")) {
-                        if(args.length > 2) {
+            if (player.hasPermission("kitpvp.admin")) {
+                if (args.length > 0) {
+                    if (args[0].equalsIgnoreCase("give")) {
+                        if (args.length > 2) {
                             Player gift = Bukkit.getPlayer(args[1]);
                             if (gift != null) {
                                 PlayerData giftedData = KitPvP.INSTANCE.getDataManager().getPlayer(gift.getPlayer().getUniqueId());
@@ -31,7 +31,7 @@ public class GiveLevelCommand implements CommandExecutor {
                         }
                     } else if (args[0].equalsIgnoreCase("all")) {
                         Bukkit.broadcastMessage(ChatColor.GREEN + "(!) Everyone has received 1 level!");
-                        for(PlayerData data : KitPvP.INSTANCE.getDataManager().getUsers().values()) {
+                        for (PlayerData data : KitPvP.INSTANCE.getDataManager().getUsers().values()) {
                             data.setLevel(data.getLevel() + 1);
                         }
                     }

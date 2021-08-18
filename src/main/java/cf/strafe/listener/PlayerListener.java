@@ -3,9 +3,16 @@ package cf.strafe.listener;
 import cf.strafe.KitPvP;
 import cf.strafe.config.Config;
 import cf.strafe.data.PlayerData;
+import cf.strafe.event.Event;
+import cf.strafe.event.map.FFAMap;
+import cf.strafe.event.map.MapManager;
+import cf.strafe.event.map.SumoMap;
+import cf.strafe.gui.EventGui;
+import cf.strafe.gui.KitGui;
 import cf.strafe.kit.Kit;
 import cf.strafe.utils.ColorUtil;
 import cf.strafe.utils.ItemUtil;
+import cf.strafe.utils.WorldGuardUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -14,16 +21,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.Objects;
 
 public class PlayerListener implements Listener {
 
@@ -46,16 +53,48 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
 
         PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
-        if( !event.getPlayer().hasPermission("kitpvp.admin")) {
+        if (!event.getPlayer().hasPermission("kitpvp.admin")) {
             if (!data.getChatCD().hasCooldown(Config.CHAT_CD)) {
                 player.sendMessage(ColorUtil.translate(String.format("&cThere is a &4%s &csecond chat delay!", data.getChatCD().getSeconds())));
                 event.setCancelled(true);
             }
         }
-        if(data.isStaffchat()) {
+        if (data.isStaffchat()) {
             event.setCancelled(true);
-            Bukkit.broadcast(ColorUtil.translate( "&6[StaffChat] &7" + player.getName() + "»&e " + event.getMessage()), "kitpvp.staff");
+            Bukkit.broadcast(ColorUtil.translate("&6[StaffChat] &7" + player.getName() + "»&e " + event.getMessage()), "kitpvp.staff");
         }
+    }
+
+    @EventHandler
+    public void onMove(PlayerMoveEvent e) {
+        PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(e.getPlayer().getUniqueId());
+        if (data.getTask() != null) {
+            if (e.getFrom().getBlockX() != e.getTo().getBlockX() || e.getFrom().getBlockZ() != e.getTo().getBlockZ()) {
+                data.getPlayer().sendMessage(ColorUtil.translate("&cTeleport canceled because of movement"));
+                data.getTask().cancel();
+                data.setTask(null);
+            }
+        }
+        if (KitPvP.INSTANCE.getEventManager().noEvent(data)) {
+            if (!WorldGuardUtils.isPvp(data.getPlayer())) {
+                if (!data.isSpawn()) {
+                    data.setSpawn(true);
+                    data.spawnPlayer();
+                }
+            } else {
+                if (data.isSpawn()) {
+                    data.setSpawn(false);
+                    if (data.getLastKit() != null) {
+                        data.giveKit(data.getLastKit());
+                    } else {
+                        data.giveKit(KitPvP.INSTANCE.getKitManager().getKits().get(0));
+                    }
+                }
+            }
+        } else {
+            data.setSpawn(false);
+        }
+
     }
 
 
@@ -64,10 +103,13 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         PlayerData killedUser = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
 
-        if(KitPvP.INSTANCE.getEventManager().event != null) {
-            if(KitPvP.INSTANCE.getEventManager().event.getPlayers().contains(killedUser)) {
-                KitPvP.INSTANCE.getEventManager().event.onDeath(killedUser);
+        if (KitPvP.INSTANCE.getEventManager().getEvent() != null) {
+            if (KitPvP.INSTANCE.getEventManager().getEvent().getPlayers().contains(killedUser)) {
+                KitPvP.INSTANCE.getEventManager().getEvent().onDeath(killedUser);
             }
+        }
+        if(KitPvP.INSTANCE.getEventManager().noEvent(killedUser)) {
+            killedUser.spawnPlayer();
         }
 
     }
@@ -76,10 +118,10 @@ public class PlayerListener implements Listener {
     public void onKill(PlayerDeathEvent event) {
         Player killed = event.getEntity();
         Player killer = event.getEntity().getKiller();
-        if(killer != null) {
+        if (killer != null) {
             PlayerData killedUser = KitPvP.INSTANCE.getDataManager().getPlayer(killed.getUniqueId());
             PlayerData killerUser = KitPvP.INSTANCE.getDataManager().getPlayer(killer.getUniqueId());
-            if(killerUser.getLastKit() != null) {
+            if (killerUser.getLastKit() != null) {
                 if (killerUser.getLastKit().getName().contains("Switcher")) {
                     ItemStack ability = new ItemStack(Material.SNOWBALL, 1);
                     ItemMeta abilityMeta = ability.getItemMeta();
@@ -114,9 +156,6 @@ public class PlayerListener implements Listener {
             } else {
                 killer.playSound(killer.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1, 1);
             }
-            Bukkit.getScheduler().scheduleSyncDelayedTask(KitPvP.INSTANCE.getPlugin(), () -> {
-                killed.spigot().respawn();
-            }, 5L);
 
             event.setDeathMessage(ColorUtil.translate(Config.KILL_MESSAGE.replace("%killer%", killer.getName()).replace("%victim%", killed.getName())));
 
@@ -124,12 +163,62 @@ public class PlayerListener implements Listener {
             killerUser.getPlayer().setExp((float) Math.max(0.99, killerUser.getXp() / killerUser.getNeededXp()));
 
         }
+        Bukkit.getScheduler().scheduleSyncDelayedTask(KitPvP.INSTANCE.getPlugin(), () -> {
+            killed.spigot().respawn();
+        }, 5L);
     }
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent event) {
         if (!event.getPlayer().hasPermission("kit.admin")) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onRight(PlayerInteractEvent event) {
+        if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+
+            int hp = 7;
+            Player p = event.getPlayer();
+
+            double h = p.getHealth();
+            Action a = event.getAction();
+            if (h != p.getMaxHealth()) {
+                if (h != 0) {
+                    if ((a == Action.RIGHT_CLICK_AIR) || (a == Action.RIGHT_CLICK_BLOCK)) {
+
+                        if (p.getItemInHand().getType() == Material.MUSHROOM_STEW) {
+                            event.setCancelled(true);
+                            p.setHealth(Math.min(h + hp, p.getMaxHealth()));
+                            p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_EAT, 3, 1);
+                            p.setItemInHand(new ItemStack(Material.AIR));
+
+
+                        }
+                    }
+                }
+            }
+            PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(event.getPlayer().getUniqueId());
+            if (event.getItem() != null && data.isSpawn()) {
+                event.setCancelled(true);
+                if (event.getItem().getType() == Material.BOOK) {
+                    KitGui kitGui = new KitGui(data);
+                    kitGui.openGui(event.getPlayer());
+                }
+                if (event.getItem().getType() == Material.GLOWSTONE_DUST) {
+                    if (data.getLastKit() != null) {
+                        data.setLastKit(data.getLastKit());
+                        data.getPlayer().sendMessage(ColorUtil.translate(Config.RECEIVED_KIT.replace("%kit%", data.getLastKit().getName())));
+                    } else {
+                        data.getPlayer().sendMessage(ChatColor.RED + "You have no last kit!");
+                    }
+                }
+                if (event.getItem().getType() == Material.ENDER_EYE) {
+                    EventGui eventGui = new EventGui(data);
+                    eventGui.openGui(event.getPlayer());
+                }
+            }
         }
     }
 
@@ -142,7 +231,7 @@ public class PlayerListener implements Listener {
 
                 if (e.getInventory().getItem(e.getSlot()).getItemMeta().getDisplayName().equalsIgnoreCase(kit.getName())) {
                     if (data.getLevel() >= kit.getLevel()) {
-                        data.giveKit(kit);
+                        data.setLastKit(kit);
                         data.getPlayer().sendMessage(ColorUtil.translate(Config.RECEIVED_KIT.replace("%kit%", kit.getName())));
                         data.getPlayer().closeInventory();
                     } else {
@@ -152,6 +241,35 @@ public class PlayerListener implements Listener {
                 }
             }
             e.setCancelled(true);
+        }
+        if (e.getView().getTitle().equalsIgnoreCase("Event Selector")) {
+            if (e.getInventory().getItem(e.getSlot()) != null) {
+                if (ChatColor.stripColor(Objects.requireNonNull(Objects.requireNonNull(e.getInventory().getItem(e.getSlot())).getItemMeta()).getDisplayName()).contains("Sumo Event")) {
+                    if (player.hasPermission("kitpvp.sumo")) {
+                        SumoMap sumoMap = MapManager.getSumoMaps().get(0);
+                        if (sumoMap != null) {
+                            KitPvP.INSTANCE.getEventManager().createSumoEvent(Event.Type.SUMO, data, sumoMap);
+                            player.sendMessage(ChatColor.GREEN + "Started event");
+                        }
+                        player.closeInventory();
+                    } else {
+                        player.sendMessage(ChatColor.RED + "You do not have permission to use events");
+                        player.closeInventory();
+                    }
+                }
+                if (ChatColor.stripColor(Objects.requireNonNull(Objects.requireNonNull(e.getInventory().getItem(e.getSlot())).getItemMeta()).getDisplayName()).contains("FFA Event")) {
+                    if (player.hasPermission("kitpvp.ffa")) {
+                        FFAMap ffaMap = MapManager.getFfaMaps().get(0);
+                        if (ffaMap != null) {
+                            KitPvP.INSTANCE.getEventManager().createFFAEvent(Event.Type.FFA, data, ffaMap);
+                            player.sendMessage(ChatColor.GREEN + "Started event");
+                        }
+                    } else {
+                        player.sendMessage(ChatColor.RED + "You do not have permission to use events");
+                        player.closeInventory();
+                    }
+                }
+            }
         }
     }
 

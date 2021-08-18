@@ -1,7 +1,7 @@
 package cf.strafe.command;
 
-import cf.strafe.data.PlayerData;
 import cf.strafe.KitPvP;
+import cf.strafe.data.PlayerData;
 import cf.strafe.utils.ColorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -13,9 +13,9 @@ import org.bukkit.entity.Player;
 public class StaffChatCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(((Player) sender).getPlayer().getUniqueId());
-            if(data.getPlayer().hasPermission("kitpvp.staff")) {
+            if (data.getPlayer().hasPermission("kitpvp.staff")) {
                 if (args.length == 0) {
                     data.setStaffchat(!data.isStaffchat());
                     data.getPlayer().sendMessage(data.isStaffchat() ? ChatColor.GREEN + "Toggled staff chat on" : ChatColor.RED + "Toggled staff chat off");

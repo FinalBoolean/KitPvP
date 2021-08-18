@@ -17,7 +17,7 @@ public class Vampire extends Ability {
     public void onHit(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player && event.getDamager() instanceof Player && !event.isCancelled()) {
             Player player = (Player) event.getDamager();
-            if(isHoldingItem(player)) {
+            if (isHoldingItem(player)) {
                 PotionEffect regen = new PotionEffect(PotionEffectType.REGENERATION, 60, 1);
                 player.addPotionEffect(regen);
             }

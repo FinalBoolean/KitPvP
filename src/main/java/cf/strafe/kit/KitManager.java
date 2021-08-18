@@ -11,10 +11,8 @@ import cf.strafe.kit.abilities.thumper.KnockOut;
 import cf.strafe.kit.abilities.vampire.Vampire;
 import cf.strafe.utils.ColorUtil;
 import lombok.Getter;
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -44,21 +42,18 @@ public class KitManager {
 
     public void loadKnight() {
         List<ItemStack> items = new ArrayList<>();
-        ItemStack SWORD = createItem(Material.STONE_SWORD, "&aKnight's Sword", "&aDecent sword for a fight.");
+        ItemStack SWORD = createItem(Material.IRON_SWORD, "&aKnight's Sword", "&aDecent sword for a fight.");
         items.add(SWORD);
         ItemStack ability = createItem(Material.BLAZE_POWDER, "&aBattle Strength", "&aGives THE POWER OF THE STEWIN for 5 seconds.");
         items.add(ability);
         KitPvP.INSTANCE.getPlugin().getServer().getPluginManager().registerEvents(new BattleStrength(ability), KitPvP.INSTANCE.getPlugin());
         List<ItemStack> armor = new ArrayList<>();
-        armor.add(createItem(Material.CHAINMAIL_BOOTS, "&aChain Boots"));
-        armor.add(createItem(Material.CHAINMAIL_LEGGINGS, "&aChain Leggings"));
-        armor.add(createItem(Material.CHAINMAIL_CHESTPLATE, "&aChain Chestplate"));
-        armor.add(createItem(Material.CHAINMAIL_HELMET, "&aChain Helmet"));
-        ItemStack[] convertitems = new ItemStack[items.size()];
-        items.toArray(convertitems);
-        ItemStack[] convertarmor = new ItemStack[armor.size()];
-        armor.toArray(convertarmor);
-        loadKit(new Kit(ColorUtil.translate("&aKnight"), Material.IRON_SWORD, 0, convertitems, convertarmor, ColorUtil.translate("&aSimple default kit")));
+        armor.add(createItem(Material.IRON_BOOTS));
+        armor.add(createItem(Material.IRON_LEGGINGS));
+        armor.add(createItem(Material.IRON_CHESTPLATE));
+        armor.add(createItem(Material.IRON_HELMET));
+
+        loadKit(new Kit(ColorUtil.translate("&aKnight"), Material.IRON_SWORD, 0, items, armor, ColorUtil.translate("&aSimple default kit")));
 
     }
 
@@ -66,23 +61,19 @@ public class KitManager {
         List<ItemStack> items = new ArrayList<>();
         ItemStack sword = createItem(Material.STONE_SWORD, "&6Archer Sword", "&aEpik weapon for slicing foes.");
         ItemStack bow = createInfiniteBow(Material.BOW, "&6Archer Bow", "&1Bow");
-        ItemStack arrow = createItem(Material.ARROW, "&aMachine gun", "&aFire a barrage of arrows");
+        ItemStack arrow = createItem(Material.ARROW, "&aMachine Gun", "&aFire a barrage of arrows");
         items.add(sword);
         items.add(bow);
         items.add(arrow);
         KitPvP.INSTANCE.getPlugin().getServer().getPluginManager().registerEvents(new MachineGun(arrow), KitPvP.INSTANCE.getPlugin());
 
         List<ItemStack> armor = new ArrayList<>();
-        armor.add(createItem(Material.CHAINMAIL_BOOTS, "&aChain Boots"));
-        armor.add(createItem(Material.CHAINMAIL_LEGGINGS, "&aChain Leggings"));
-        armor.add(createItem(Material.CHAINMAIL_CHESTPLATE, "&aChain Chestplate"));
-        armor.add(createItem(Material.CHAINMAIL_HELMET, "&aChain Helmet"));
+        armor.add(createItem(Material.IRON_BOOTS));
+        armor.add(createItem(Material.IRON_LEGGINGS));
+        armor.add(createItem(Material.CHAINMAIL_CHESTPLATE));
+        armor.add(createItem(Material.IRON_HELMET));
 
-        ItemStack[] convertitems = new ItemStack[items.size()];
-        items.toArray(convertitems);
-        ItemStack[] convertarmor = new ItemStack[armor.size()];
-        armor.toArray(convertarmor);
-        kits.add(new Kit(ColorUtil.translate("&aArcher"), Material.BOW, 0, convertitems, convertarmor, ColorUtil.translate("&aBecome a archer")));
+        kits.add(new Kit(ColorUtil.translate("&aArcher"), Material.BOW, 0, items, armor, ColorUtil.translate("&aBecome a archer")));
     }
 
     public void loadThumper() {
@@ -95,15 +86,12 @@ public class KitManager {
 
         List<ItemStack> armor = new ArrayList<>();
         armor.add(createItem(Material.GOLDEN_BOOTS, "&aGold Boots"));
-        armor.add(createItem(Material.GOLDEN_LEGGINGS, "&aGold Leggings"));
-        armor.add(createItem(Material.GOLDEN_CHESTPLATE, "&aGold Chestplate"));
-        armor.add(createItem(Material.GOLDEN_HELMET, "&aGold Helmet"));
 
-        ItemStack[] convertitems = new ItemStack[items.size()];
-        items.toArray(convertitems);
-        ItemStack[] convertarmor = new ItemStack[armor.size()];
-        armor.toArray(convertarmor);
-        kits.add(new Kit(ColorUtil.translate("&6Thumper"), Material.GOLDEN_AXE, 10, convertitems, convertarmor, ColorUtil.translate("&6Knock people out")));
+        armor.add(createItem(Material.GOLDEN_LEGGINGS));
+        armor.add(createItem(Material.GOLDEN_CHESTPLATE));
+        armor.add(createItem(Material.GOLDEN_HELMET));
+
+        kits.add(new Kit(ColorUtil.translate("&6Thumper"), Material.GOLDEN_AXE, 10, items, armor, ColorUtil.translate("&6Knock people out")));
 
     }
 
@@ -116,22 +104,19 @@ public class KitManager {
         KitPvP.INSTANCE.getPlugin().getServer().getPluginManager().registerEvents(new Vampire(sword), KitPvP.INSTANCE.getPlugin());
 
         List<ItemStack> armor = new ArrayList<>();
-        armor.add(createItem(Material.CHAINMAIL_BOOTS, "&aChain Boots"));
-        armor.add(createItem(Material.CHAINMAIL_LEGGINGS, "&aChain Leggings"));
-        armor.add(createItem(Material.CHAINMAIL_CHESTPLATE, "&aChain Chestplate"));
-        armor.add(createItem(Material.CHAINMAIL_HELMET, "&aChain Helmet"));
+        armor.add(createItem(Material.IRON_BOOTS));
+        armor.add(createItem(Material.IRON_LEGGINGS));
+        armor.add(createItem(Material.IRON_CHESTPLATE));
+        armor.add(createItem(Material.LEATHER_HELMET));
 
-        ItemStack[] convertitems = new ItemStack[items.size()];
-        items.toArray(convertitems);
-        ItemStack[] convertarmor = new ItemStack[armor.size()];
-        armor.toArray(convertarmor);
-        kits.add(new Kit(ColorUtil.translate("&cVampire"), Material.GHAST_TEAR, 15, convertitems, convertarmor, ColorUtil.translate("&cHas a chance to heal you when attacking")));
+        kits.add(new Kit(ColorUtil.translate("&cVampire"), Material.GHAST_TEAR, 15, items, armor, ColorUtil.translate("&cHas a chance to heal you when attacking")));
     }
 
     public void loadNinja() {
         List<ItemStack> items = new ArrayList<>();
 
-        ItemStack sword = createItem(Material.STONE_SWORD, "&aNinja Sword");
+        ItemStack sword = createItem(Material.IRON_SWORD, "&aNinja Sword");
+        sword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
         ItemStack ability = createItem(Material.NETHER_STAR, "&bDash", "&aReceive a dash!");
 
         items.add(sword);
@@ -139,24 +124,19 @@ public class KitManager {
         KitPvP.INSTANCE.getPlugin().getServer().getPluginManager().registerEvents(new Dash(ability), KitPvP.INSTANCE.getPlugin());
 
         List<ItemStack> armor = new ArrayList<>();
-        armor.add(createItem(Material.CHAINMAIL_BOOTS, "&aChain Boots"));
-        armor.add(createItem(Material.CHAINMAIL_LEGGINGS, "&aChain Leggings"));
-        armor.add(createItem(Material.CHAINMAIL_CHESTPLATE, "&aChain Chestplate"));
-        armor.add(createItem(Material.CHAINMAIL_HELMET, "&aChain Helmet"));
+        armor.add(createItem(Material.IRON_BOOTS));
+        armor.add(createItem(Material.IRON_LEGGINGS));
+        armor.add(createItem(Material.IRON_CHESTPLATE));
+        armor.add(createItem(Material.LEATHER_HELMET));
 
-        ItemStack[] convertitems = new ItemStack[items.size()];
-        items.toArray(convertitems);
-        ItemStack[] convertarmor = new ItemStack[armor.size()];
-        armor.toArray(convertarmor);
-
-        kits.add(new Kit(ColorUtil.translate("&aNinja"), Material.NETHER_STAR, 20, convertitems, convertarmor, ColorUtil.translate("&aBe very silent and fast")));
+        kits.add(new Kit(ColorUtil.translate("&aNinja"), Material.NETHER_STAR, 20, items, armor, ColorUtil.translate("&aBe very silent and fast")));
     }
 
     public void loadEnderman() {
         List<ItemStack> items = new ArrayList<>();
 
         ItemStack sword = createItem(Material.IRON_AXE, "&aEnderman Sword");
-        sword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+        sword.addEnchantment(Enchantment.DAMAGE_ALL, 2);
         ItemStack ability = createItem(Material.CLOCK, "&dRecall", "&dTeleport to the last location you were");
 
         items.add(sword);
@@ -169,12 +149,7 @@ public class KitManager {
         armor.add(createItem(Material.CHAINMAIL_CHESTPLATE, "&aChain Chestplate"));
         armor.add(createItem(Material.CHAINMAIL_HELMET, "&aChain Helmet"));
 
-        ItemStack[] convertitems = new ItemStack[items.size()];
-        items.toArray(convertitems);
-        ItemStack[] convertarmor = new ItemStack[armor.size()];
-        armor.toArray(convertarmor);
-
-        kits.add(new Kit(ColorUtil.translate("&dEnderman"), Material.ENDER_PEARL, 25, convertitems, convertarmor, ColorUtil.translate("&dTeleport around places")));
+        kits.add(new Kit(ColorUtil.translate("&dEnderman"), Material.ENDER_PEARL, 25, items, armor, ColorUtil.translate("&dTeleport around places")));
     }
 
     public void loadPyro() {
@@ -186,22 +161,18 @@ public class KitManager {
         KitPvP.INSTANCE.getPlugin().getServer().getPluginManager().registerEvents(new FlameSword(sword), KitPvP.INSTANCE.getPlugin());
 
         List<ItemStack> armor = new ArrayList<>();
-        armor.add(createItem(Material.CHAINMAIL_BOOTS, "&aChain Boots"));
-        armor.add(createItem(Material.CHAINMAIL_LEGGINGS, "&aChain Leggings"));
-        armor.add(createItem(Material.CHAINMAIL_CHESTPLATE, "&aChain Chestplate"));
-        armor.add(createItem(Material.CHAINMAIL_HELMET, "&aChain Helmet"));
+        armor.add(createItem(Material.LEATHER_BOOTS));
+        armor.add(createItem(Material.CHAINMAIL_LEGGINGS));
+        armor.add(createItem(Material.CHAINMAIL_CHESTPLATE));
+        armor.add(createItem(Material.CHAINMAIL_HELMET));
 
-        ItemStack[] convertitems = new ItemStack[items.size()];
-        items.toArray(convertitems);
-        ItemStack[] convertarmor = new ItemStack[armor.size()];
-        armor.toArray(convertarmor);
-        kits.add(new Kit(ColorUtil.translate("&cPyro"), Material.BLAZE_POWDER, 30, convertitems, convertarmor, ColorUtil.translate("&cHarness the power of &4FIRE!")));
+        kits.add(new Kit(ColorUtil.translate("&cPyro"), Material.BLAZE_POWDER, 30, items, armor, ColorUtil.translate("&cHarness the power of &4FIRE!")));
     }
 
     public void loadSwitcher() {
         List<ItemStack> items = new ArrayList<>();
 
-        ItemStack sword = createItem(Material.STONE_SWORD, "&eSwitcher Sword", "");
+        ItemStack sword = createItem(Material.IRON_SWORD, "&eSwitcher Sword", "");
         items.add(sword);
 
         ItemStack ability = new ItemStack(Material.SNOWBALL, 4);
@@ -214,19 +185,13 @@ public class KitManager {
         KitPvP.INSTANCE.getPlugin().getServer().getPluginManager().registerEvents(new Switcher(), KitPvP.INSTANCE.getPlugin());
 
         List<ItemStack> armor = new ArrayList<>();
-        armor.add(createItem(Material.CHAINMAIL_BOOTS, "&aChain Boots"));
+        armor.add(createItem(Material.DIAMOND_BOOTS, "&aChain Boots"));
         armor.add(createItem(Material.CHAINMAIL_LEGGINGS, "&aChain Leggings"));
         armor.add(createItem(Material.CHAINMAIL_CHESTPLATE, "&aChain Chestplate"));
         armor.add(createItem(Material.CHAINMAIL_HELMET, "&aChain Helmet"));
 
-        ItemStack[] convertitems = new ItemStack[items.size()];
-        items.toArray(convertitems);
-        ItemStack[] convertarmor = new ItemStack[armor.size()];
-        armor.toArray(convertarmor);
-
-        kits.add(new Kit(ColorUtil.translate("&fSwitcher"), Material.SNOWBALL, 35, convertitems, convertarmor, ColorUtil.translate("&fSwap Positions with your opponents")));
+        kits.add(new Kit(ColorUtil.translate("&fSwitcher"), Material.SNOWBALL, 35, items, armor, ColorUtil.translate("&fSwap Positions with your opponents")));
     }
-
 
     protected ItemStack createItem(final Material material, final String name, final String... lore) {
         final ItemStack item = new ItemStack(material, 1);
@@ -244,6 +209,22 @@ public class KitManager {
 
         return item;
     }
+
+    protected ItemStack createItem(final Material material) {
+        final ItemStack item = new ItemStack(material, 1);
+        final ItemMeta meta = item.getItemMeta();
+
+        // Set the name of the item
+        assert meta != null;
+
+        // Set the lore of the item
+        meta.setUnbreakable(true);
+
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
 
     protected ItemStack createInfiniteBow(final Material material, final String name, String... lore) {
         final ItemStack item = new ItemStack(material, 1);

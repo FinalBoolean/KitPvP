@@ -91,7 +91,7 @@ public enum KitPvP {
                                 event.setCancelled(true); //The sound will no longer be played
                             }
                         }
-                        if(event.getPacketType() == PacketType.Play.Server.WORLD_PARTICLES) {
+                        if (event.getPacketType() == PacketType.Play.Server.WORLD_PARTICLES) {
                             Particle particle = event.getPacket().getNewParticles().read(0).getParticle();
                             Bukkit.broadcast(particle.name(), "wizardpro.core");
                             if (particle == Particle.DAMAGE_INDICATOR || particle == Particle.SWEEP_ATTACK) {
@@ -113,7 +113,7 @@ public enum KitPvP {
     }
 
     public void registerHealthBar() {
-        if(teamManager.getObjective("health") != null) {
+        if (teamManager.getObjective("health") != null) {
             teamManager.getObjective("health").unregister();
         }
         Objective o = teamManager.registerNewObjective("health", "health");
@@ -150,6 +150,7 @@ public enum KitPvP {
         plugin.getCommand("sumo").setExecutor(new SumoCommand());
         plugin.getCommand("event").setExecutor(new EventCommand());
         plugin.getCommand("ffa").setExecutor(new FFACommand());
+        plugin.getCommand("spawn").setExecutor(new SpawnCommand());
     }
 
 

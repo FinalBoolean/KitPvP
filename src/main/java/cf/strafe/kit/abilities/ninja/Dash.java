@@ -1,7 +1,7 @@
 package cf.strafe.kit.abilities.ninja;
 
-import cf.strafe.data.PlayerData;
 import cf.strafe.KitPvP;
+import cf.strafe.data.PlayerData;
 import cf.strafe.kit.Ability;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -21,7 +21,7 @@ public class Dash extends Ability {
     @EventHandler
     public void onRightClick(PlayerInteractEvent event) {
         if (event.getAction() == Action.RIGHT_CLICK_AIR) {
-            if(isHoldingItem(event.getPlayer())) {
+            if (isHoldingItem(event.getPlayer())) {
                 PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(event.getPlayer().getUniqueId());
                 if (data.getAbilityCD().hasCooldown(10)) {
                     data.getPlayer().sendMessage(ChatColor.GREEN + "(!) You used Dash!");

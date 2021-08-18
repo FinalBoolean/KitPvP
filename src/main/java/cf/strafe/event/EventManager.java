@@ -6,20 +6,17 @@ import cf.strafe.event.events.FreeForAll;
 import cf.strafe.event.events.Sumo;
 import cf.strafe.event.map.FFAMap;
 import cf.strafe.event.map.SumoMap;
-import org.apache.commons.lang.StringUtils;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
-import java.util.ArrayList;
-
+@Getter
 public class EventManager {
 
-    public Event event;
-    public Event.Type eventType;
-    public int gameTime;
-    public PlayerData host;
+    private Event event;
+    private Event.Type eventType;
+    private PlayerData host;
 
     public EventManager() {
         initialize();
@@ -29,6 +26,14 @@ public class EventManager {
         this.host = host;
         if (e == Event.Type.SUMO) {
             event = new Sumo(sumoMap, host);
+        }
+    }
+
+    public boolean noEvent(PlayerData player) {
+        if (event != null) {
+            return !event.getPlayers().contains(player) && !event.getSpectators().contains(player);
+        } else {
+            return true;
         }
     }
 
@@ -46,7 +51,7 @@ public class EventManager {
                 for (PlayerData player : event.getPlayers()) {
                     event.removePlayer(player);
                 }
-                for(PlayerData players : event.getSpectators()) {
+                for (PlayerData players : event.getSpectators()) {
                     event.removePlayer(players);
                 }
             }
@@ -63,7 +68,7 @@ public class EventManager {
                 for (PlayerData player : event.getPlayers()) {
                     event.removePlayer(player);
                 }
-                for(PlayerData players : event.getSpectators()) {
+                for (PlayerData players : event.getSpectators()) {
                     event.removePlayer(players);
                 }
             }
