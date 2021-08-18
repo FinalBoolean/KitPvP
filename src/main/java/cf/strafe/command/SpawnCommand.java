@@ -16,8 +16,8 @@ public class SpawnCommand implements CommandExecutor {
             Player player = ((Player) sender).getPlayer();
             PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
             if (KitPvP.INSTANCE.getEventManager().noEvent(data)) {
-                player.sendMessage(ChatColor.GREEN + "Teleporting please wait 5 seconds, do not move!");
                 if (data.getTask() == null) {
+                    player.sendMessage(ChatColor.GREEN + "Teleporting please wait 5 seconds, do not move!");
                     data.setTask(new BukkitRunnable() {
                         @Override
                         public void run() {
