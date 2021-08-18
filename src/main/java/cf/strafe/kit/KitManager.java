@@ -3,6 +3,7 @@ package cf.strafe.kit;
 import cf.strafe.KitPvP;
 import cf.strafe.kit.abilities.archer.MachineGun;
 import cf.strafe.kit.abilities.enderman.Recall;
+import cf.strafe.kit.abilities.invis.Invisibility;
 import cf.strafe.kit.abilities.knight.BattleStrength;
 import cf.strafe.kit.abilities.ninja.Dash;
 import cf.strafe.kit.abilities.pyro.FlameSword;
@@ -33,6 +34,7 @@ public class KitManager {
         loadNinja();
         loadEnderman();
         loadPyro();
+        loadInvis();
         loadSwitcher();
     }
 
@@ -132,6 +134,8 @@ public class KitManager {
         kits.add(new Kit(ColorUtil.translate("&aNinja"), Material.NETHER_STAR, 20, items, armor, ColorUtil.translate("&aBe very silent and fast")));
     }
 
+
+
     public void loadEnderman() {
         List<ItemStack> items = new ArrayList<>();
 
@@ -151,6 +155,27 @@ public class KitManager {
 
         kits.add(new Kit(ColorUtil.translate("&dEnderman"), Material.ENDER_PEARL, 25, items, armor, ColorUtil.translate("&dTeleport around places")));
     }
+
+    public void loadInvis(){
+        List<ItemStack> items = new ArrayList<>();
+
+        ItemStack sword = createItem(Material.GOLDEN_AXE,"&9&bInvisibility Axe","&c&bGives you power!");
+        sword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+        ItemStack ability = createItem(Material.GHAST_TEAR,"&aActivate Invisibility","&a&bMakes you invisible!");
+
+        items.add(sword);
+        items.add(ability);
+
+        KitPvP.INSTANCE.getPlugin().getServer().getPluginManager().registerEvents(new Invisibility(ability),KitPvP.INSTANCE.getPlugin());
+
+        List<ItemStack> armor = new ArrayList<>();
+        armor.add(createItem(Material.CHAINMAIL_HELMET,"&aChain Helmet"));
+        armor.add(createItem(Material.CHAINMAIL_CHESTPLATE,"&aChain Chestplate"));
+        armor.add(createItem(Material.IRON_LEGGINGS,"&aIron Leggings"));
+        armor.add(createItem(Material.GOLDEN_BOOTS,"&aGolden Boots"));
+        kits.add(new Kit(ColorUtil.translate("&dInvisibility"), Material.GHAST_TEAR, 35, items, armor, ColorUtil.translate("&aHit people while being invisible")));
+    }
+
 
     public void loadPyro() {
         List<ItemStack> items = new ArrayList<>();
