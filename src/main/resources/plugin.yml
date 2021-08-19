@@ -30,3 +30,5 @@ commands:
     description: Allows staff to create ffa events
   spawn:
     description: Allows the player to go to spawn
+  skywars:
+    description: Allows staff to create skywars events

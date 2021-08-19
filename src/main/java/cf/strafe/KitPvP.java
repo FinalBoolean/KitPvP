@@ -151,7 +151,9 @@ public enum KitPvP {
         plugin.getCommand("event").setExecutor(new EventCommand());
         plugin.getCommand("ffa").setExecutor(new FFACommand());
         plugin.getCommand("spawn").setExecutor(new SpawnCommand());
+        plugin.getCommand("skywars").setExecutor(new SkywarsCommand());
     }
+
 
 
 }

@@ -68,6 +68,7 @@ public class FreeForAll extends Event {
                         Bukkit.broadcastMessage(ColorUtil.translate("&6[Event] &fFFA Event &7has started!"));
                     } else {
                         KitPvP.INSTANCE.getEventManager().deleteEvent("Not enough players.");
+                        state = State.END;
                     }
                 }
                 break;

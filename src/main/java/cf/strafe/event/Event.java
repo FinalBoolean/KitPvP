@@ -3,9 +3,12 @@ package cf.strafe.event;
 import cf.strafe.KitPvP;
 import cf.strafe.data.PlayerData;
 import cf.strafe.utils.ColorUtil;
+import com.sk89q.worldguard.bukkit.event.block.BreakBlockEvent;
 import lombok.Getter;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
@@ -39,9 +42,11 @@ public abstract class Event implements Listener {
         }
     }
 
-    public void onDeath(PlayerData playerData) {
+    public void onDeath(PlayerData playerData) {}
 
-    }
+    public void onBlockPlace(BlockPlaceEvent event) {}
+
+    public void onBlockBreak(BreakBlockEvent event) {}
 
     public void removePlayer(PlayerData player) {
         if (players.contains(player)) {
@@ -80,7 +85,7 @@ public abstract class Event implements Listener {
     }
 
     public enum Type {
-        SUMO, FFA;
+        SUMO, FFA, SKYWARS;
 
         public String toString() {
             return StringUtils.capitalize(this.name().toLowerCase());

@@ -13,6 +13,7 @@ import cf.strafe.kit.Kit;
 import cf.strafe.utils.ColorUtil;
 import cf.strafe.utils.ItemUtil;
 import cf.strafe.utils.WorldGuardUtils;
+import com.sk89q.worldguard.bukkit.event.block.BreakBlockEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -22,6 +23,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
@@ -46,6 +48,25 @@ public class PlayerListener implements Listener {
         player.sendMessage(ColorUtil.translate("&7» &6Discord: &fdiscord.strafed.us"));
         player.sendMessage(ColorUtil.translate("&7&m-----------------------------------"));
 
+    }
+
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent event) {
+        PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(event.getPlayer().getUniqueId());
+        if (KitPvP.INSTANCE.getEventManager().getEvent() != null) {
+            if (KitPvP.INSTANCE.getEventManager().getEvent().getPlayers().contains(data)) {
+                KitPvP.INSTANCE.getEventManager().getEvent().onBlockPlace(event);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onBlockBreak(BreakBlockEvent event) {
+        if (KitPvP.INSTANCE.getEventManager().getEvent() != null) {
+
+            KitPvP.INSTANCE.getEventManager().getEvent().onBlockBreak(event);
+
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -170,7 +191,8 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent event) {
-        if (!event.getPlayer().hasPermission("kit.admin")) {
+        PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(event.getPlayer().getUniqueId());
+        if (!event.getPlayer().hasPermission("kit.admin") || KitPvP.INSTANCE.getEventManager().noEvent(data)) {
             event.setCancelled(true);
         }
     }
@@ -201,7 +223,7 @@ public class PlayerListener implements Listener {
             }
             PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(event.getPlayer().getUniqueId());
             if (event.getItem() != null && data.isSpawn()) {
-                event.setCancelled(true);
+
                 if (event.getItem().getType() == Material.BOOK) {
                     KitGui kitGui = new KitGui(data);
                     kitGui.openGui(event.getPlayer());
@@ -215,6 +237,7 @@ public class PlayerListener implements Listener {
                     }
                 }
                 if (event.getItem().getType() == Material.ENDER_EYE) {
+                    event.setCancelled(true);
                     EventGui eventGui = new EventGui(data);
                     eventGui.openGui(event.getPlayer());
                 }

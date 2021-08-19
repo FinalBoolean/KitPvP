@@ -3,8 +3,10 @@ package cf.strafe.event;
 import cf.strafe.KitPvP;
 import cf.strafe.data.PlayerData;
 import cf.strafe.event.events.FreeForAll;
+import cf.strafe.event.events.Skywars;
 import cf.strafe.event.events.Sumo;
 import cf.strafe.event.map.FFAMap;
+import cf.strafe.event.map.SkywarsMap;
 import cf.strafe.event.map.SumoMap;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -45,6 +47,13 @@ public class EventManager {
         }
     }
 
+    public void createSkyWarsEvent(Event.Type e, PlayerData host, SkywarsMap skywarsMap) {
+        this.host = host;
+        if (e == Event.Type.SKYWARS) {
+            event = new Skywars(skywarsMap, host);
+        }
+    }
+
     public void deleteEvent(String reason) {
         if (event != null) {
             if (event.getPlayers() != null) {
@@ -56,6 +65,7 @@ public class EventManager {
                 }
             }
         }
+
         Bukkit.broadcastMessage(ChatColor.RED + "The event was cancelled. Reason: " + reason);
         event = null;
         eventType = null;
@@ -72,6 +82,7 @@ public class EventManager {
                     event.removePlayer(players);
                 }
             }
+            event.state = Event.State.END;
         }
         event = null;
         eventType = null;

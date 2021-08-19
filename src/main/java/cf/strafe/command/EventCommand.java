@@ -3,8 +3,10 @@ package cf.strafe.command;
 import cf.strafe.KitPvP;
 import cf.strafe.data.PlayerData;
 import cf.strafe.event.Event;
+import cf.strafe.event.events.Skywars;
 import cf.strafe.event.map.FFAMap;
 import cf.strafe.event.map.MapManager;
+import cf.strafe.event.map.SkywarsMap;
 import cf.strafe.event.map.SumoMap;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -44,6 +46,20 @@ public class EventCommand implements CommandExecutor {
                                             if (ffaMap != null) {
                                                 PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
                                                 KitPvP.INSTANCE.getEventManager().createFFAEvent(Event.Type.FFA, data, ffaMap);
+                                                player.sendMessage(ChatColor.GREEN + "Started event");
+                                            } else {
+                                                player.sendMessage(ChatColor.RED + "Available maps: ");
+                                                for (FFAMap map : MapManager.getFfaMaps()) {
+                                                    player.sendMessage(ChatColor.GREEN + map.getMapName());
+                                                }
+                                            }
+                                            break;
+                                        }
+                                        case "skywars": {
+                                            SkywarsMap skywarsMap = MapManager.getSkywarsMap(args[2]);
+                                            if (skywarsMap != null) {
+                                                PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
+                                                KitPvP.INSTANCE.getEventManager().createSkyWarsEvent(Event.Type.SKYWARS, data, skywarsMap);
                                                 player.sendMessage(ChatColor.GREEN + "Started event");
                                             } else {
                                                 player.sendMessage(ChatColor.RED + "Available maps: ");

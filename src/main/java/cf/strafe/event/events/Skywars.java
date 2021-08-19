@@ -6,9 +6,8 @@ import cf.strafe.event.Event;
 import cf.strafe.event.map.SkywarsMap;
 import cf.strafe.event.map.skywars.ChestLocation;
 import cf.strafe.utils.ColorUtil;
-import cf.strafe.utils.ItemUtil;
-import cf.strafe.utils.Pair;
 import cf.strafe.utils.scoreboard.FastBoard;
+import com.sk89q.worldguard.bukkit.event.block.BreakBlockEvent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -16,8 +15,11 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,10 @@ public class Skywars extends Event {
     private final SkywarsMap map;
 
     private final List<Location> usedLocations = new ArrayList<>();
+    private final List<Block> blockBreakLocations = new ArrayList<>();
+    private final List<Block> blockPlaceLocations = new ArrayList<>();
+
+
     public Skywars(SkywarsMap map, PlayerData host) {
         this.map = map;
         maxPlayers = 12;
@@ -41,27 +47,60 @@ public class Skywars extends Event {
      */
 
     @Override
+    public void onDeath(PlayerData playerData) {
+        players.remove(playerData);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                addPlayer(playerData);
+            }
+        }.runTaskLater(KitPvP.INSTANCE.getPlugin(), 5);
+
+        super.onDeath(playerData);
+    }
+
+
+    @Override
+    public void onBlockPlace(BlockPlaceEvent event) {
+        if (event != null) {
+            blockPlaceLocations.add(event.getBlock());
+        }
+        super.onBlockPlace(event);
+    }
+
+    @Override
+    public void onBlockBreak(BreakBlockEvent event) {
+        blockBreakLocations.addAll(event.getBlocks());
+        super.onBlockBreak(event);
+    }
+
+    @Override
     public void addPlayer(PlayerData player) {
-        for(Location locations : map.getSpawnLocations()) {
-            if(!usedLocations.contains(locations)) {
-                player.getPlayer().teleport(locations);
-                int y_inc = 2;
-                int xz_inc = 1;
-                for (int x = -(xz_inc); x <= xz_inc; x++) {
-                    for (int y = -(y_inc); y <= y_inc; y++) {
-                        for (int z = -(xz_inc); z <= xz_inc; z++) {
-                            Location loc = new Location(locations.getWorld(), x, y, z);
-                            if (locations == loc || player.getPlayer().getEyeLocation() == loc) {
-                                return;
+        if (state == State.WAITING) {
+            player.getPlayer().getInventory().clear();
+            for (Location locations : map.getSpawnLocations()) {
+                if (!usedLocations.contains(locations)) {
+                    player.getPlayer().teleport(locations);
+                    int y_inc = 2;
+                    int xz_inc = 1;
+                    for (int x = -(xz_inc); x <= xz_inc; x++) {
+                        for (int y = -(y_inc); y <= y_inc; y++) {
+                            for (int z = -(xz_inc); z <= xz_inc; z++) {
+                                Location loc = new Location(locations.getWorld(), locations.getX() + x, locations.getY() + y, locations.getZ() + z);
+                                if (locations == loc || player.getPlayer().getEyeLocation() == loc) {
+                                    return;
+                                }
+                                Block b = loc.getBlock();
+                                b.setType(Material.GLASS);
                             }
-                            Block b = loc.getBlock();
-                            b.setType(Material.GLASS);
                         }
                     }
+                    usedLocations.add(locations);
+                    break;
                 }
-                usedLocations.add(locations);
-                break;
             }
+        } else {
+            player.getPlayer().teleport(map.getSpectatorLocation());
         }
         super.addPlayer(player);
     }
@@ -93,10 +132,7 @@ public class Skywars extends Event {
                             for (int x = -(xz_inc); x <= xz_inc; x++) {
                                 for (int y = -(y_inc); y <= y_inc; y++) {
                                     for (int z = -(xz_inc); z <= xz_inc; z++) {
-                                        Location loc = new Location(location.getWorld(), x, y, z);
-                                        if (location == loc) {
-                                            return;
-                                        }
+                                        Location loc = new Location(location.getWorld(), location.getX() + x, location.getY() + y, location.getZ() + z);
                                         Block b = loc.getBlock();
                                         b.setType(Material.AIR);
                                     }
@@ -106,12 +142,13 @@ public class Skywars extends Event {
                         for(ChestLocation chestLocations : map.getChestLocations()) {
                             Block b = chestLocations.getLocation().getBlock();
                             if(b.getBlockData().getMaterial() == Material.CHEST) {
-                                Chest chest = (Chest) b;
+                                Chest chest = (Chest) b.getState();
                                 chest.getBlockInventory().setContents(chestLocations.getInventory());
                             }
                         }
                     } else {
                         KitPvP.INSTANCE.getEventManager().deleteEvent("Not enough players.");
+                        state = State.END;
                     }
                 }
 
@@ -119,7 +156,7 @@ public class Skywars extends Event {
             }
             case INGAME: {
                 if (players.size() < 2) {
-                    Bukkit.broadcastMessage(ColorUtil.translate("&6[Event] &f" + players.get(0).getPlayer().getName() + " &7has won the &fFFA Event&7!"));
+                    Bukkit.broadcastMessage(ColorUtil.translate("&6[Event] &f" + players.get(0).getPlayer().getName() + " &7has won the &fSkywars Event&7!"));
                     state = State.END;
                 }
                 break;
@@ -132,6 +169,23 @@ public class Skywars extends Event {
                 for (PlayerData players : getSpectators()) {
                     removePlayer(players);
                 }
+                for (Block block : blockPlaceLocations) {
+                    Block b = block.getLocation().getBlock();
+                    b.setType(Material.AIR);
+                }
+                for (Block block : blockBreakLocations) {
+                    Block b = block.getLocation().getBlock();
+                    b.setType(block.getType());
+                }
+                blockPlaceLocations.clear();
+                blockBreakLocations.clear();
+                List<Entity> entList = map.getSpectatorLocation().getWorld().getEntities();
+
+                for (Entity current : entList) {
+                    if (current instanceof Item) {
+                    }
+                }
+
                 break;
             }
         }
@@ -147,14 +201,14 @@ public class Skywars extends Event {
             }
             board.updateTitle(ColorUtil.translate("&6&lStrafed &7┃ &fKits"));
             board.updateLine(0, ColorUtil.translate("&7&m------------------"));
-            board.updateLine(1, ColorUtil.translate("&6Event: &fSumo"));
+            board.updateLine(1, ColorUtil.translate("&6Event: &fSkywars"));
             board.updateLine(2, ColorUtil.translate("&6Players: &f" + players.size() + "/" + maxPlayers));
             board.updateLine(3, ColorUtil.translate("&7&m------------------"));
 
             if (state == State.WAITING) {
                 board.updateLine(4, ColorUtil.translate("&6Starting in: &f" + gameTime + "s"));
-            } else {
-                board.updateLine(4, ColorUtil.translate("&eWaiting for players..."));
+            } else if (state == State.INGAME) {
+                board.updateLine(4, ColorUtil.translate("&eHave fun :)"));
             }
             board.updateLine(5, "");
             board.updateLine(6, "strafekits.minehut.gg");
