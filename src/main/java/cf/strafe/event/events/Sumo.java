@@ -37,6 +37,10 @@ public class Sumo extends Event {
     public void addPlayer(PlayerData player) {
         player.getPlayer().teleport(map.getSpawnLocation());
         player.getPlayer().getInventory().clear();
+        player.getPlayer().getInventory().setHelmet(null);
+        player.getPlayer().getInventory().setChestplate(null);
+        player.getPlayer().getInventory().setLeggings(null);
+        player.getPlayer().getInventory().setBoots(null);
         KitPvP.INSTANCE.getScoreboardManager().get(player.getPlayer()).updateLines();
         super.addPlayer(player);
         //for (PlayerData loopPlayer : players) {
@@ -99,11 +103,12 @@ public class Sumo extends Event {
                         roundPlayers.getY().getPlayer().teleport(map.getFightLocation2());
 
                         PotionEffect potionEffect = PotionEffectType.JUMP.createEffect(100, 200);
-                        roundPlayers.getX().getPlayer().addPotionEffect(potionEffect);
-                        roundPlayers.getY().getPlayer().addPotionEffect(potionEffect);
-
                         PotionEffect potionEffect2 = PotionEffectType.SLOW.createEffect(100, 100);
-                        roundPlayers.getX().getPlayer().addPotionEffect(potionEffect2);
+
+                        roundPlayers.getX().getPlayer().addPotionEffect(potionEffect);
+                        roundPlayers.getY().getPlayer().addPotionEffect(potionEffect2);
+
+                        roundPlayers.getX().getPlayer().addPotionEffect(potionEffect);
                         roundPlayers.getY().getPlayer().addPotionEffect(potionEffect2);
 
                         roundPlayers.getX().getPlayer().sendMessage(ColorUtil.translate("&6[Event] &7Round against &f" + roundPlayers.getY().getPlayer().getName() + " &7starting in &f5s..."));

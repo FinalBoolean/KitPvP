@@ -55,6 +55,10 @@ public class PlayerData {
     public void spawnPlayer() {
         spawn = true;
         player.getInventory().clear();
+        player.getPlayer().getInventory().setHelmet(null);
+        player.getPlayer().getInventory().setChestplate(null);
+        player.getPlayer().getInventory().setLeggings(null);
+        player.getPlayer().getInventory().setBoots(null);
         player.getInventory().setItem(0, ItemUtil.createItemWithName(Material.BOOK, "&eSelect Kit &f(Right Click)"));
         player.getInventory().setItem(1, ItemUtil.createItemWithName(Material.GLOWSTONE_DUST, "&ePrevious Kit &f(Right Click)"));
         player.getInventory().setItem(8, ItemUtil.createItemWithName(Material.EYE_OF_ENDER, "&eEvents &f(Right Click)"));
