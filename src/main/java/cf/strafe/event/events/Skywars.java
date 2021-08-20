@@ -11,6 +11,7 @@ import com.sk89q.worldguard.bukkit.event.block.BreakBlockEvent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -18,11 +19,15 @@ import org.bukkit.block.Chest;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class Skywars extends Event {
@@ -30,7 +35,7 @@ public class Skywars extends Event {
     private final SkywarsMap map;
 
     private final List<Location> usedLocations = new ArrayList<>();
-    private final List<Block> blockBreakLocations = new ArrayList<>();
+    private final Map<Location, Material> blockBreakLocations = new HashMap<>();
     private final List<Block> blockPlaceLocations = new ArrayList<>();
 
 
@@ -39,7 +44,7 @@ public class Skywars extends Event {
         maxPlayers = 12;
 
         state = State.WAITING;
-        gameTime = 60;
+        gameTime = 15;
         this.host = host;
     }
     /*
@@ -62,15 +67,16 @@ public class Skywars extends Event {
 
     @Override
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (event != null) {
-            blockPlaceLocations.add(event.getBlock());
-        }
+        blockPlaceLocations.add(event.getBlock());
         super.onBlockPlace(event);
     }
 
     @Override
-    public void onBlockBreak(BreakBlockEvent event) {
-        blockBreakLocations.addAll(event.getBlocks());
+    public void onBlockBreak(BlockBreakEvent event) {
+        if(!blockPlaceLocations.contains(event.getBlock())) {
+            blockBreakLocations.put(event.getBlock().getLocation(), event.getBlock().getType());
+        }
+        event.getPlayer().sendMessage("you broke " + event.getBlock().getType());
         super.onBlockBreak(event);
     }
 
@@ -141,7 +147,7 @@ public class Skywars extends Event {
                         }
                         for(ChestLocation chestLocations : map.getChestLocations()) {
                             Block b = chestLocations.getLocation().getBlock();
-                            if(b.getBlockData().getMaterial() == Material.CHEST) {
+                            if(b.getType() == Material.CHEST) {
                                 Chest chest = (Chest) b.getState();
                                 chest.getBlockInventory().setContents(chestLocations.getInventory());
                             }
@@ -169,20 +175,25 @@ public class Skywars extends Event {
                 for (PlayerData players : getSpectators()) {
                     removePlayer(players);
                 }
+
                 for (Block block : blockPlaceLocations) {
                     Block b = block.getLocation().getBlock();
                     b.setType(Material.AIR);
                 }
-                for (Block block : blockBreakLocations) {
-                    Block b = block.getLocation().getBlock();
-                    b.setType(block.getType());
+
+                for (Map.Entry<Location, Material> entry : blockBreakLocations.entrySet()) {
+                    Block b = entry.getKey().getBlock();
+                    b.setType(entry.getValue());
+                    Bukkit.broadcastMessage(b.getType().toString());
                 }
+
                 blockPlaceLocations.clear();
                 blockBreakLocations.clear();
                 List<Entity> entList = map.getSpectatorLocation().getWorld().getEntities();
 
                 for (Entity current : entList) {
                     if (current instanceof Item) {
+                        current.remove();
                     }
                 }
 

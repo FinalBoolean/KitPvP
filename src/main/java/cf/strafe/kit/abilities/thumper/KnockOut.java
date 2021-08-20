@@ -25,7 +25,7 @@ public class KnockOut extends Ability {
             PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
             if (isHoldingItem(player) && player.isSneaking()) {
                 if (data.getAbilityCD().hasCooldown(20)) {
-                    data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.BLOCK_ANVIL_BREAK, 1, 1);
+                    data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.ANVIL_LAND, 1, 1);
                     player.sendMessage(ChatColor.GREEN + "(!) You used Knock Out!");
                     entity.sendMessage(ChatColor.RED + "You have been knocked out by " + player.getName());
                     PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 60, 3);

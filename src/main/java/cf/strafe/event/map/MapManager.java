@@ -2,6 +2,7 @@ package cf.strafe.event.map;
 
 import cf.strafe.KitPvP;
 import cf.strafe.event.map.skywars.ChestLocation;
+import cf.strafe.utils.LocationUtil;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -90,11 +91,11 @@ public class MapManager {
                 List<ChestLocation> chestLocations = new ArrayList<>();
                 for (int i = 0; i < config.getInt(arenaName + ".spawnLocations.count"); ) {
                     i++;
-                    locations.add(config.getLocation(arenaName + ".spawnLocations." + i + ".location"));
+                    locations.add(LocationUtil.parseToLocation(config.getString(arenaName + ".spawnLocations." + i + ".location")));
                 }
                 for(int i = 0; i < config.getInt(arenaName + ".chestLocations.count");) {
                     i++;
-                    Location chestLocation = config.getLocation(arenaName + ".chestLocations." + i + ".location");
+                    Location chestLocation = LocationUtil.parseToLocation(config.getString(arenaName + ".chestLocations." + i + ".location"));
                     List<ItemStack> itemStacks = new ArrayList<>();
                     for(int i2 = 0; i2 < config.getInt(arenaName + ".chestLocations." + i + ".items.count");) {
                         i2++;
@@ -102,7 +103,7 @@ public class MapManager {
                     }
                     chestLocations.add(new ChestLocation(chestLocation, itemStacks));
                 }
-                Location spectatorLocation = config.getLocation(arenaName + ".spawn");
+                Location spectatorLocation = LocationUtil.parseToLocation(config.getString(arenaName + ".spawn"));
                 getSkywarsMap().add(new SkywarsMap(arenaName, spectatorLocation, chestLocations, locations));
             }
         }
@@ -121,12 +122,12 @@ public class MapManager {
 
         YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
         for(SkywarsMap skywarsMap : MapManager.getSkywarsMap()) {
-            yml.set(skywarsMap.getMapName() + ".spawn", skywarsMap.getSpectatorLocation());
+            yml.set(skywarsMap.getMapName() + ".spawn", LocationUtil.parseToString(skywarsMap.getSpectatorLocation()));
             int l = 0;
             for(Location location : skywarsMap.getSpawnLocations()) {
                 l++;
                 yml.set(skywarsMap.getMapName() + ".spawnLocations." + l + ".id", l);
-                yml.set(skywarsMap.getMapName() + ".spawnLocations." + l + ".location", location);
+                yml.set(skywarsMap.getMapName() + ".spawnLocations." + l + ".location", LocationUtil.parseToString(location));
             }
             yml.set(skywarsMap.getMapName() + ".spawnLocations.count", l);
             /*
@@ -136,7 +137,7 @@ public class MapManager {
             for(ChestLocation chestLocation : skywarsMap.getChestLocations()) {
                 s++;
                 yml.set(skywarsMap.getMapName() + ".chestLocations." + s + ".id", s);
-                yml.set(skywarsMap.getMapName() + ".chestLocations." + s + ".location", chestLocation.getLocation());
+                yml.set(skywarsMap.getMapName() + ".chestLocations." + s + ".location", LocationUtil.parseToString(chestLocation.getLocation()));
 
                 //FUCKING KILL ME
                 int count = 0;
@@ -177,9 +178,9 @@ public class MapManager {
         }
         YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
         for (SumoMap arena : MapManager.getSumoMaps()) {
-            yml.set(arena.getMapName() + ".spawnLocation", arena.getSpawnLocation());
-            yml.set(arena.getMapName() + ".fight1", arena.getFightLocation1());
-            yml.set(arena.getMapName() + ".fight2", arena.getFightLocation2());
+            yml.set(arena.getMapName() + ".spawnLocation", LocationUtil.parseToString(arena.getSpawnLocation()));
+            yml.set(arena.getMapName() + ".fight1", LocationUtil.parseToString(arena.getFightLocation1()));
+            yml.set(arena.getMapName() + ".fight2", LocationUtil.parseToString(arena.getFightLocation2()));
             yml.set(arena.getMapName() + ".fallLevel", arena.getFallLevel());
             yml.set(arena.getMapName() + ".name", arena.getMapName());
         }
@@ -205,9 +206,9 @@ public class MapManager {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
             for (String key : config.getKeys(false)) {
                 String arenaName = config.getString(key + ".name");
-                Location spawnLocation = config.getLocation(key + ".spawnLocation");
-                Location fight1 = config.getLocation(key + ".fight1");
-                Location fight2 = config.getLocation(key + ".fight2");
+                Location spawnLocation = LocationUtil.parseToLocation(config.getString(key + ".spawnLocation"));
+                Location fight1 = LocationUtil.parseToLocation(config.getString(key + ".fight1"));
+                Location fight2 = LocationUtil.parseToLocation(config.getString(key + ".fight2"));
                 int fallLevel = config.getInt(key + ".fallLevel");
                 MapManager.getSumoMaps().add(new SumoMap(arenaName, spawnLocation, fight1, fight2, fallLevel));
                 System.out.println("Loading Arena " + arenaName);
@@ -228,8 +229,8 @@ public class MapManager {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
             for (String key : config.getKeys(false)) {
                 String arenaName = config.getString(key + ".name");
-                Location spawnLocation = config.getLocation(key + ".spawnLocation");
-                Location fight = config.getLocation(key + ".fight");
+                Location spawnLocation = LocationUtil.parseToLocation(config.getString(key + ".spawnLocation"));
+                Location fight = LocationUtil.parseToLocation(config.getString(key + ".fight"));
                 MapManager.getFfaMaps().add(new FFAMap(arenaName, spawnLocation, fight));
                 System.out.println("Loading Arena " + arenaName);
             }
@@ -251,8 +252,8 @@ public class MapManager {
         }
         YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
         for (FFAMap arena : MapManager.getFfaMaps()) {
-            yml.set(arena.getMapName() + ".spawnLocation", arena.getSpawnLocation());
-            yml.set(arena.getMapName() + ".fight", arena.getFightLocation());
+            yml.set(arena.getMapName() + ".spawnLocation", LocationUtil.parseToString(arena.getSpawnLocation()));
+            yml.set(arena.getMapName() + ".fight", LocationUtil.parseToString(arena.getFightLocation()));
             yml.set(arena.getMapName() + ".name", arena.getMapName());
         }
 

@@ -27,7 +27,7 @@ public class Dash extends Ability {
                     data.getPlayer().sendMessage(ChatColor.GREEN + "(!) You used Dash!");
                     PotionEffect invisibility = new PotionEffect(PotionEffectType.INVISIBILITY, 60, 1);
                     PotionEffect strength = new PotionEffect(PotionEffectType.SPEED, 60, 3);
-                    data.getPlayer().playSound(data.getPlayer().getLocation(), Sound.ENTITY_HORSE_GALLOP, 1, 1);
+                    data.getPlayer().playSound(data.getPlayer().getLocation(), Sound.HORSE_GALLOP, 1, 1);
                     data.getPlayer().addPotionEffect(invisibility);
                     data.getPlayer().addPotionEffect(strength);
                 } else {

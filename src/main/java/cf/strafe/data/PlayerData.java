@@ -57,7 +57,7 @@ public class PlayerData {
         player.getInventory().clear();
         player.getInventory().setItem(0, ItemUtil.createItemWithName(Material.BOOK, "&eSelect Kit &f(Right Click)"));
         player.getInventory().setItem(1, ItemUtil.createItemWithName(Material.GLOWSTONE_DUST, "&ePrevious Kit &f(Right Click)"));
-        player.getInventory().setItem(8, ItemUtil.createItemWithName(Material.ENDER_EYE, "&eEvents &f(Right Click)"));
+        player.getInventory().setItem(8, ItemUtil.createItemWithName(Material.EYE_OF_ENDER, "&eEvents &f(Right Click)"));
     }
 
 
@@ -74,7 +74,7 @@ public class PlayerData {
         player.getInventory().setContents(kit.getItemContents());
         player.getInventory().setArmorContents(kit.getArmorContents());
         player.updateInventory();
-        player.playSound(player.getLocation(), Sound.ENTITY_HORSE_SADDLE, 1, 1);
+        player.playSound(player.getLocation(), Sound.HORSE_SADDLE, 1, 1);
 
     }
 

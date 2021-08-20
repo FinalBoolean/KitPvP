@@ -81,19 +81,19 @@ public class KitManager {
     public void loadThumper() {
         List<ItemStack> items = new ArrayList<>();
 
-        ItemStack sword = createItem(Material.GOLDEN_AXE, "&6Thumper Axe", "&aShift left click and hit an entity to knock out");
+        ItemStack sword = createItem(Material.GOLD_AXE, "&6Thumper Axe", "&aShift left click and hit an entity to knock out");
         sword.addEnchantment(Enchantment.DAMAGE_ALL, 3);
         items.add(sword);
         KitPvP.INSTANCE.getPlugin().getServer().getPluginManager().registerEvents(new KnockOut(sword), KitPvP.INSTANCE.getPlugin());
 
         List<ItemStack> armor = new ArrayList<>();
-        armor.add(createItem(Material.GOLDEN_BOOTS, "&aGold Boots"));
+        armor.add(createItem(Material.GOLD_BOOTS, "&aGold Boots"));
 
-        armor.add(createItem(Material.GOLDEN_LEGGINGS));
-        armor.add(createItem(Material.GOLDEN_CHESTPLATE));
-        armor.add(createItem(Material.GOLDEN_HELMET));
+        armor.add(createItem(Material.GOLD_LEGGINGS));
+        armor.add(createItem(Material.GOLD_CHESTPLATE));
+        armor.add(createItem(Material.GOLD_HELMET));
 
-        kits.add(new Kit(ColorUtil.translate("&6Thumper"), Material.GOLDEN_AXE, 10, items, armor, ColorUtil.translate("&6Knock people out")));
+        kits.add(new Kit(ColorUtil.translate("&6Thumper"), Material.GOLD_AXE, 10, items, armor, ColorUtil.translate("&6Knock people out")));
 
     }
 
@@ -141,7 +141,7 @@ public class KitManager {
 
         ItemStack sword = createItem(Material.IRON_AXE, "&aEnderman Sword");
         sword.addEnchantment(Enchantment.DAMAGE_ALL, 2);
-        ItemStack ability = createItem(Material.CLOCK, "&dRecall", "&dTeleport to the last location you were");
+        ItemStack ability = createItem(Material.WATCH, "&dRecall", "&dTeleport to the last location you were");
 
         items.add(sword);
         items.add(ability);
@@ -159,7 +159,7 @@ public class KitManager {
     public void loadInvis(){
         List<ItemStack> items = new ArrayList<>();
 
-        ItemStack sword = createItem(Material.GOLDEN_AXE,"&9&bInvisibility Axe","&c&bGives you power!");
+        ItemStack sword = createItem(Material.GOLD_AXE,"&9&bInvisibility Axe","&c&bGives you power!");
         sword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
         ItemStack ability = createItem(Material.GHAST_TEAR,"&aActivate Invisibility","&a&bMakes you invisible!");
 
@@ -172,7 +172,7 @@ public class KitManager {
         armor.add(createItem(Material.CHAINMAIL_HELMET,"&aChain Helmet"));
         armor.add(createItem(Material.CHAINMAIL_CHESTPLATE,"&aChain Chestplate"));
         armor.add(createItem(Material.IRON_LEGGINGS,"&aIron Leggings"));
-        armor.add(createItem(Material.GOLDEN_BOOTS,"&aGolden Boots"));
+        armor.add(createItem(Material.GOLD_BOOTS,"&aGolden Boots"));
         kits.add(new Kit(ColorUtil.translate("&dInvisibility"), Material.GHAST_TEAR, 35, items, armor, ColorUtil.translate("&aHit people while being invisible")));
     }
 
@@ -200,7 +200,7 @@ public class KitManager {
         ItemStack sword = createItem(Material.IRON_SWORD, "&eSwitcher Sword", "");
         items.add(sword);
 
-        ItemStack ability = new ItemStack(Material.SNOWBALL, 4);
+        ItemStack ability = new ItemStack(Material.SNOW_BALL, 4);
         ItemMeta abilityMeta = ability.getItemMeta();
         abilityMeta.setDisplayName(ColorUtil.translate("&fSwitcher Ball"));
         ability.setItemMeta(abilityMeta);
@@ -215,7 +215,7 @@ public class KitManager {
         armor.add(createItem(Material.CHAINMAIL_CHESTPLATE, "&aChain Chestplate"));
         armor.add(createItem(Material.CHAINMAIL_HELMET, "&aChain Helmet"));
 
-        kits.add(new Kit(ColorUtil.translate("&fSwitcher"), Material.SNOWBALL, 35, items, armor, ColorUtil.translate("&fSwap Positions with your opponents")));
+        kits.add(new Kit(ColorUtil.translate("&fSwitcher"), Material.SNOW_BALL, 35, items, armor, ColorUtil.translate("&fSwap Positions with your opponents")));
     }
 
     protected ItemStack createItem(final Material material, final String name, final String... lore) {
@@ -227,7 +227,7 @@ public class KitManager {
         meta.setDisplayName(ColorUtil.translate(name));
 
         // Set the lore of the item
-        meta.setUnbreakable(true);
+        meta.spigot().setUnbreakable(true);
         meta.setLore(ColorUtil.translate(Arrays.asList(lore)));
 
         item.setItemMeta(meta);
@@ -243,7 +243,7 @@ public class KitManager {
         assert meta != null;
 
         // Set the lore of the item
-        meta.setUnbreakable(true);
+        meta.spigot().setUnbreakable(true);
 
         item.setItemMeta(meta);
 
@@ -259,7 +259,7 @@ public class KitManager {
         meta.setDisplayName(ColorUtil.translate(name));
         meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
         // Set the lore of the item
-        meta.setUnbreakable(true);
+        meta.spigot().setUnbreakable(true);
         meta.setLore(ColorUtil.translate(Arrays.asList(lore)));
 
         item.setItemMeta(meta);

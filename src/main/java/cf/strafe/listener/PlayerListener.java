@@ -23,6 +23,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -61,11 +62,9 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onBlockBreak(BreakBlockEvent event) {
+    public void onBlockBreak(BlockBreakEvent event) {
         if (KitPvP.INSTANCE.getEventManager().getEvent() != null) {
-
             KitPvP.INSTANCE.getEventManager().getEvent().onBlockBreak(event);
-
         }
     }
 
@@ -144,7 +143,7 @@ public class PlayerListener implements Listener {
             PlayerData killerUser = KitPvP.INSTANCE.getDataManager().getPlayer(killer.getUniqueId());
             if (killerUser.getLastKit() != null) {
                 if (killerUser.getLastKit().getName().contains("Switcher")) {
-                    ItemStack ability = new ItemStack(Material.SNOWBALL, 1);
+                    ItemStack ability = new ItemStack(Material.SNOW_BALL, 1);
                     ItemMeta abilityMeta = ability.getItemMeta();
                     abilityMeta.setDisplayName(ColorUtil.translate("&fSwitcher Ball"));
                     ability.setItemMeta(abilityMeta);
@@ -172,10 +171,10 @@ public class PlayerListener implements Listener {
             if (killerUser.getXp() >= killerUser.getNeededXp()) {
                 killerUser.setXp(0);
                 killerUser.setLevel(killerUser.getLevel() + 1);
-                killer.playSound(killer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+                killer.playSound(killer.getLocation(), Sound.LEVEL_UP, 1, 1);
                 killerUser.setNeededXp(killer.getLevel() * 25);
             } else {
-                killer.playSound(killer.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1, 1);
+                killer.playSound(killer.getLocation(), Sound.ITEM_PICKUP, 1, 1);
             }
 
             event.setDeathMessage(ColorUtil.translate(Config.KILL_MESSAGE.replace("%killer%", killer.getName()).replace("%victim%", killed.getName())));
@@ -201,26 +200,6 @@ public class PlayerListener implements Listener {
     public void onRight(PlayerInteractEvent event) {
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 
-            int hp = 7;
-            Player p = event.getPlayer();
-
-            double h = p.getHealth();
-            Action a = event.getAction();
-            if (h != p.getMaxHealth()) {
-                if (h != 0) {
-                    if ((a == Action.RIGHT_CLICK_AIR) || (a == Action.RIGHT_CLICK_BLOCK)) {
-
-                        if (p.getItemInHand().getType() == Material.MUSHROOM_STEW) {
-                            event.setCancelled(true);
-                            p.setHealth(Math.min(h + hp, p.getMaxHealth()));
-                            p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_EAT, 3, 1);
-                            p.setItemInHand(new ItemStack(Material.AIR));
-
-
-                        }
-                    }
-                }
-            }
             PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(event.getPlayer().getUniqueId());
             if (event.getItem() != null && data.isSpawn()) {
 
@@ -236,7 +215,7 @@ public class PlayerListener implements Listener {
                         data.getPlayer().sendMessage(ChatColor.RED + "You have no last kit!");
                     }
                 }
-                if (event.getItem().getType() == Material.ENDER_EYE) {
+                if (event.getItem().getType() == Material.EYE_OF_ENDER) {
                     event.setCancelled(true);
                     EventGui eventGui = new EventGui(data);
                     eventGui.openGui(event.getPlayer());

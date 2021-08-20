@@ -28,7 +28,7 @@ public class EventGui implements Listener {
     }
 
     public void loadEvents() {
-        inv.addItem(createGuiItem(Material.LEGACY_LEASH, "&eSumo Event &f(Click)"));
+        inv.addItem(createGuiItem(Material.LEASH, "&eSumo Event &f(Click)"));
         inv.addItem(createGuiItem(Material.DIAMOND_SWORD, "&eFFA Event &f(Click)"));
     }
 

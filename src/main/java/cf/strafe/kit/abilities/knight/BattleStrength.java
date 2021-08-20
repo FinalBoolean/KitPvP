@@ -23,7 +23,7 @@ public class BattleStrength extends Ability {
             if (isHoldingItem(event)) {
                 PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(event.getPlayer().getUniqueId());
                 if (data.getAbilityCD().hasCooldown(20)) {
-                    data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
+                    data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.VILLAGER_NO, 1, 1);
                     PotionEffect strength = new PotionEffect(PotionEffectType.SPEED, 200, 1);
                     data.getPlayer().addPotionEffect(strength);
                     data.getPlayer().sendMessage(ChatColor.GREEN + "(!) You used battle strength!");

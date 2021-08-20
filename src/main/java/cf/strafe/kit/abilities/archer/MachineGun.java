@@ -28,7 +28,7 @@ public class MachineGun extends Ability {
             PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(event.getPlayer().getUniqueId());
             if (isHoldingItem(event)) {
                 if (data.getAbilityCD().hasCooldown(15)) {
-                    data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
+                    data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.VILLAGER_NO, 1, 1);
                     data.getPlayer().sendMessage(ChatColor.GREEN + "(!) You used Machine Gun!");
                     AtomicInteger count = new AtomicInteger();
                     final int[] id = {0};
@@ -41,7 +41,7 @@ public class MachineGun extends Ability {
                             arrow.setShooter(player);
                             arrow.setVelocity(player.getEyeLocation().getDirection().multiply(2));
                             arrow.setCustomName("crazy arrow bro");
-                            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 1, 1);
+                            player.getWorld().playSound(player.getLocation(), Sound.SHOOT_ARROW, 1, 1);
                             arrow.setCritical(true);
                             arrow.setCustomNameVisible(false);
                         } else {

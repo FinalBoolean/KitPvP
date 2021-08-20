@@ -19,7 +19,7 @@ public class ItemUtil {
         meta.setDisplayName(ColorUtil.translate(name));
 
         // Set the lore of the item
-        meta.setUnbreakable(true);
+        meta.spigot().setUnbreakable(true);
         meta.setLore(ColorUtil.translate(Arrays.asList(lore)));
 
         item.setItemMeta(meta);
@@ -35,7 +35,7 @@ public class ItemUtil {
         assert meta != null;
 
         // Set the lore of the item
-        meta.setUnbreakable(true);
+        meta.spigot().setUnbreakable(true);
 
         item.setItemMeta(meta);
 
@@ -50,7 +50,7 @@ public class ItemUtil {
         assert meta != null;
 
         // Set the lore of the item
-        meta.setUnbreakable(true);
+        meta.spigot().setUnbreakable(true);
 
         item.setItemMeta(meta);
 

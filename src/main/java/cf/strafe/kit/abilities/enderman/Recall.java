@@ -27,7 +27,7 @@ public class Recall extends Ability {
                     data.setRecallLocation(data.getPlayer().getLocation());
                     data.recallTask = Bukkit.getScheduler().runTaskTimer(KitPvP.INSTANCE.getPlugin(), () -> {
                         data.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + "Recalling in " + data.getCountDown());
-                        data.getPlayer().playSound(data.getPlayer().getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
+                        data.getPlayer().playSound(data.getPlayer().getLocation(), Sound.NOTE_PLING, 1, 1);
                         if (data.countDown == 0) {
                             data.getPlayer().teleport(data.getRecallLocation());
                             data.setRecallLocation(null);

@@ -25,13 +25,13 @@ public class FlameSword extends Ability {
                 if (data.getAbilityCD().hasCooldown(10)) {
                     if (event.getItem() != null) {
                         data.getPlayer().sendMessage(ChatColor.GREEN + "(!) You used FlameSword");
-                        data.getPlayer().playSound(data.getPlayer().getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1);
+                        data.getPlayer().playSound(data.getPlayer().getLocation(), Sound.GHAST_FIREBALL, 1, 1);
                         event.getItem().addEnchantment(Enchantment.FIRE_ASPECT, 2);
                         event.getItem().addEnchantment(Enchantment.DAMAGE_ALL, 1);
                         Bukkit.getScheduler().scheduleSyncDelayedTask(KitPvP.INSTANCE.getPlugin(), () -> {
                             event.getItem().removeEnchantment(Enchantment.FIRE_ASPECT);
                             event.getItem().removeEnchantment(Enchantment.DAMAGE_ALL);
-                            data.getPlayer().playSound(data.getPlayer().getLocation(), Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 1, 1);
+                            data.getPlayer().playSound(data.getPlayer().getLocation(), Sound.FIZZ, 1, 1);
                         }, 60);
                     }
                 } else {

@@ -46,7 +46,7 @@ public abstract class Event implements Listener {
 
     public void onBlockPlace(BlockPlaceEvent event) {}
 
-    public void onBlockBreak(BreakBlockEvent event) {}
+    public void onBlockBreak(BlockBreakEvent event) {}
 
     public void removePlayer(PlayerData player) {
         if (players.contains(player)) {

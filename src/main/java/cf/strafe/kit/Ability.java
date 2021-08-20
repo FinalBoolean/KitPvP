@@ -13,11 +13,11 @@ public abstract class Ability implements Listener {
     private final ItemStack itemName;
 
     public boolean isHoldingItem(PlayerEvent event) {
-        return event.getPlayer().getInventory().getItemInMainHand().equals(itemName);
+        return event.getPlayer().getInventory().getItemInHand().equals(itemName);
     }
 
     public boolean isHoldingItem(Player player) {
-        return player.getInventory().getItemInMainHand().equals(itemName);
+        return player.getInventory().getItemInHand().equals(itemName);
     }
 
 }
