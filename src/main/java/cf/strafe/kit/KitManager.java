@@ -5,7 +5,7 @@ import cf.strafe.kit.abilities.archer.MachineGun;
 import cf.strafe.kit.abilities.enderman.Recall;
 import cf.strafe.kit.abilities.invis.Invisibility;
 import cf.strafe.kit.abilities.knight.BattleStrength;
-import cf.strafe.kit.abilities.ninja.Dash;
+import cf.strafe.kit.abilities.ninja.Shuriken;
 import cf.strafe.kit.abilities.pyro.FlameSword;
 import cf.strafe.kit.abilities.switcher.Switcher;
 import cf.strafe.kit.abilities.thumper.KnockOut;
@@ -119,11 +119,11 @@ public class KitManager {
 
         ItemStack sword = createItem(Material.IRON_SWORD, "&aNinja Sword");
         sword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
-        ItemStack ability = createItem(Material.NETHER_STAR, "&bDash", "&aReceive a dash!");
+        ItemStack ability = createItem(Material.NETHER_STAR, "&aShuriken", "&aRight click to throw shurikens!!");
 
         items.add(sword);
         items.add(ability);
-        KitPvP.INSTANCE.getPlugin().getServer().getPluginManager().registerEvents(new Dash(ability), KitPvP.INSTANCE.getPlugin());
+        KitPvP.INSTANCE.getPlugin().getServer().getPluginManager().registerEvents(new Shuriken(ability), KitPvP.INSTANCE.getPlugin());
 
         List<ItemStack> armor = new ArrayList<>();
         armor.add(createItem(Material.IRON_BOOTS));
@@ -131,7 +131,7 @@ public class KitManager {
         armor.add(createItem(Material.IRON_CHESTPLATE));
         armor.add(createItem(Material.LEATHER_HELMET));
 
-        kits.add(new Kit(ColorUtil.translate("&aNinja"), Material.NETHER_STAR, 20, items, armor, ColorUtil.translate("&aBe very silent and fast")));
+        kits.add(new Kit(ColorUtil.translate("&aNinja"), Material.NETHER_STAR, 20, items, armor, ColorUtil.translate("&bThrow ninja shurikens that knock people out")));
     }
 
 

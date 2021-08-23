@@ -149,6 +149,11 @@ public class PlayerListener implements Listener {
                     abilityMeta.setDisplayName(ColorUtil.translate("&fSwitcher Ball"));
                     ability.setItemMeta(abilityMeta);
                     killer.getInventory().addItem(ability);
+
+                }
+                if(killerUser.getLastKit().getName().contains("Ninja")) {
+                    ItemStack item = ItemUtil.createItemWithName(Material.NETHER_STAR, "&aShuriken", "&aRight click to throw shurikens!!");
+                    killer.getInventory().addItem(item);
                 }
             }
             killedUser.setKillStreak(0);

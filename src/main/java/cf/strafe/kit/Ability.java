@@ -20,4 +20,8 @@ public abstract class Ability implements Listener {
         return player.getInventory().getItemInHand().equals(itemName);
     }
 
+    public boolean isHoldingItem2(Player player) {
+        return player.getInventory().getItemInHand().getItemMeta().getDisplayName().equals(itemName.getItemMeta().getDisplayName());
+    }
+
 }
