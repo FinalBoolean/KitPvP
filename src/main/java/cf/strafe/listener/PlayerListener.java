@@ -189,9 +189,7 @@ public class PlayerListener implements Listener {
             killerUser.getPlayer().setExp((float) Math.max(0.99, killerUser.getXp() / killerUser.getNeededXp()));
 
         }
-        Bukkit.getScheduler().scheduleSyncDelayedTask(KitPvP.INSTANCE.getPlugin(), () -> {
-            killed.spigot().respawn();
-        }, 5L);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(KitPvP.INSTANCE.getPlugin(), () -> killed.spigot().respawn(), 5L);
     }
 
     @EventHandler

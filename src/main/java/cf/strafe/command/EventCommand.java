@@ -20,6 +20,18 @@ public class EventCommand implements CommandExecutor {
         if (sender instanceof Player) {
             Player player = ((Player) sender).getPlayer();
 
+            if (args.length == 1) {
+                if (args[0].equalsIgnoreCase("join")) {
+                    if (KitPvP.INSTANCE.getEventManager().getEvent() != null) {
+                        PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
+                        KitPvP.INSTANCE.getEventManager().getEvent().addPlayer(data);
+                    } else {
+                        player.sendMessage(ChatColor.RED + "No event is on");
+                    }
+                    return false;
+                }
+            }
+
             if (player.hasPermission("kitpvp.events")) {
                 if (args.length > 1) {
                     switch (args[0].toLowerCase()) {

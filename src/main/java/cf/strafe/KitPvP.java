@@ -29,12 +29,12 @@ public enum KitPvP {
     INSTANCE;
 
 
-    private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
     private KitManager kitManager;
     private BroadcastManager broadcastManager;
     private DataManager dataManager;
     private ScoreboardManager scoreboardManager;
-    private Scoreboard teamManager;
+    private Scoreboard teamManager;    private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+
     private EventManager eventManager;
     private Main plugin;
 

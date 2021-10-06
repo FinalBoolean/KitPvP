@@ -55,7 +55,7 @@ public class FreeForAll extends Event {
                 gameTime--;
                 if (gameTime == 29 || gameTime == 20 || gameTime == 10) {
                     TextComponent textComponent = new TextComponent(ColorUtil.translate("&6[Event] &f" + host.getPlayer().getName() + " &7is hosting a &fFFA Event! &a[Click to join]"));
-                    textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ffa join"));
+                    textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/event join"));
                     Bukkit.broadcastMessage(ColorUtil.translate("&7"));
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         player.spigot().sendMessage(textComponent);
@@ -95,12 +95,11 @@ public class FreeForAll extends Event {
             }
 
             case END: {
-                KitPvP.INSTANCE.getEventManager().deleteEvent();
-                /*
-                 * Having to do this since if someone dies we don't want a concurrent exception.
-                 */
-                for (PlayerData players : getSpectators()) {
-                    removePlayer(players);
+                if(players.isEmpty() && spectators.isEmpty()) {
+                    KitPvP.INSTANCE.getEventManager().deleteEvent();
+                } else {
+                    if(!players.isEmpty()) removePlayer(players.get(0));
+                    if(!spectators.isEmpty()) removePlayer(spectators.get(0));
                 }
                 break;
             }

@@ -3,9 +3,9 @@ package cf.strafe.event;
 import cf.strafe.KitPvP;
 import cf.strafe.data.PlayerData;
 import cf.strafe.utils.ColorUtil;
-import com.sk89q.worldguard.bukkit.event.block.BreakBlockEvent;
 import lombok.Getter;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -25,6 +25,10 @@ public abstract class Event implements Listener {
     public abstract void update();
 
     public void addPlayer(PlayerData player) {
+        if (players.contains(player)) {
+            player.getPlayer().sendMessage(ChatColor.RED + "You are already in a event!");
+            return;
+        }
         if (players.size() >= maxPlayers) {
             player.getPlayer().sendMessage(ColorUtil.translate("&cThat event is fulL!"));
             return;
@@ -49,22 +53,14 @@ public abstract class Event implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {}
 
     public void removePlayer(PlayerData player) {
-        if (players.contains(player)) {
-            players.remove(player);
-            player.getPlayer().sendMessage(ColorUtil.translate("&cYou have left the event!"));
-            for (PotionEffect effect : player.getPlayer().getActivePotionEffects())
-                player.getPlayer().removePotionEffect(effect.getType());
-            player.getPlayer().teleport(player.getPlayer().getWorld().getSpawnLocation());
-            player.giveKit(KitPvP.INSTANCE.getKitManager().getKits().get(0));
-        }
-        if (spectators.contains(player)) {
-            spectators.remove(player);
-            player.getPlayer().sendMessage(ColorUtil.translate("&cYou have left the event!"));
-            for (PotionEffect effect : player.getPlayer().getActivePotionEffects())
-                player.getPlayer().removePotionEffect(effect.getType());
-            player.getPlayer().teleport(player.getPlayer().getWorld().getSpawnLocation());
-            player.giveKit(KitPvP.INSTANCE.getKitManager().getKits().get(0));
-        }
+        spectators.remove(player);
+        players.remove(player);
+        player.getPlayer().sendMessage(ColorUtil.translate("&cYou have left the event!"));
+        for (PotionEffect effect : player.getPlayer().getActivePotionEffects())
+            player.getPlayer().removePotionEffect(effect.getType());
+        player.getPlayer().teleport(player.getPlayer().getWorld().getSpawnLocation());
+        player.giveKit(KitPvP.INSTANCE.getKitManager().getKits().get(0));
+
     }
 
 

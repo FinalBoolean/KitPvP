@@ -8,9 +8,11 @@ import cf.strafe.event.events.Sumo;
 import cf.strafe.event.map.FFAMap;
 import cf.strafe.event.map.SkywarsMap;
 import cf.strafe.event.map.SumoMap;
+import cf.strafe.utils.ColorUtil;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 @Getter
@@ -55,35 +57,15 @@ public class EventManager {
     }
 
     public void deleteEvent(String reason) {
-        if (event != null) {
-            if (event.getPlayers() != null) {
-                for (PlayerData player : event.getPlayers()) {
-                    event.removePlayer(player);
-                }
-                for (PlayerData players : event.getSpectators()) {
-                    event.removePlayer(players);
-                }
-            }
+        if(event != null) {
+            event.state = Event.State.END;
+            Bukkit.broadcastMessage(ChatColor.RED + "The event was cancelled. Reason: " + reason);
+        } else {
+            Bukkit.broadcastMessage(ChatColor.RED + "Error please fix..");
         }
-
-        Bukkit.broadcastMessage(ChatColor.RED + "The event was cancelled. Reason: " + reason);
-        event = null;
-        eventType = null;
-        host = null;
     }
 
     public void deleteEvent() {
-        if (event != null) {
-            if (event.getPlayers() != null) {
-                for (PlayerData player : event.getPlayers()) {
-                    event.removePlayer(player);
-                }
-                for (PlayerData players : event.getSpectators()) {
-                    event.removePlayer(players);
-                }
-            }
-            event.state = Event.State.END;
-        }
         event = null;
         eventType = null;
         host = null;

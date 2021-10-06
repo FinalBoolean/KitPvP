@@ -16,18 +16,6 @@ public class SumoCommand implements CommandExecutor {
         if (sender instanceof Player) {
             Player player = ((Player) sender).getPlayer();
             if (player.hasPermission("kitpvp.staff")) {
-                if (args.length == 1) {
-                    if (args[0].equalsIgnoreCase("join")) {
-                        if (KitPvP.INSTANCE.getEventManager().getEvent() != null) {
-                            PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
-                            KitPvP.INSTANCE.getEventManager().getEvent().addPlayer(data);
-                            player.sendMessage(ChatColor.GREEN + "You joined the event");
-                        } else {
-                            player.sendMessage(ChatColor.RED + "No event is on");
-                        }
-                        return false;
-                    }
-                }
                 if (args.length > 1) {
                     switch (args[0].toLowerCase()) {
                         case "create": {
@@ -77,51 +65,9 @@ public class SumoCommand implements CommandExecutor {
                             }
                             break;
                         }
-                        case "join": {
-                            if (KitPvP.INSTANCE.getEventManager().getEvent() != null) {
-                                PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
-                                KitPvP.INSTANCE.getEventManager().getEvent().addPlayer(data);
-                                player.sendMessage(ChatColor.GREEN + "You joined the event");
-                            } else {
-                                player.sendMessage(ChatColor.RED + "No event is on");
-                            }
-                            break;
-                        }
-                        case "leave": {
-                            if (KitPvP.INSTANCE.getEventManager().getEvent() != null) {
-                                PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
-                                KitPvP.INSTANCE.getEventManager().getEvent().removePlayer(data);
-                                player.sendMessage(ChatColor.GREEN + "You left the event");
-                            } else {
-                                player.sendMessage(ChatColor.RED + "No event is on");
-                            }
-                            break;
-                        }
                     }
                 } else {
                     player.sendMessage(ChatColor.RED + "Usage: /sumo create [name], sumo spawn [name], sumo fight1 [name], sumo fight2 [name], sumo fallLevel");
-                }
-            } else {
-                if (args.length > 0) {
-                    if (args[0].equalsIgnoreCase("join")) {
-                        if (KitPvP.INSTANCE.getEventManager().getEvent() != null) {
-                            PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
-                            KitPvP.INSTANCE.getEventManager().getEvent().addPlayer(data);
-                            player.sendMessage(ChatColor.GREEN + "You joined the event");
-                        } else {
-                            player.sendMessage(ChatColor.RED + "No event is on");
-                        }
-                    } else if (args[0].equalsIgnoreCase("leave")) {
-                        if (KitPvP.INSTANCE.getEventManager().getEvent() != null) {
-                            PlayerData data = KitPvP.INSTANCE.getDataManager().getPlayer(player.getUniqueId());
-                            KitPvP.INSTANCE.getEventManager().getEvent().removePlayer(data);
-                            player.sendMessage(ChatColor.GREEN + "You left the event");
-                        } else {
-                            player.sendMessage(ChatColor.RED + "No event is on");
-                        }
-                    }
-                } else {
-                    player.sendMessage(ChatColor.RED + "/sumo join, /sumo leave ");
                 }
             }
         }

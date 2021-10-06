@@ -120,7 +120,7 @@ public class Skywars extends Event {
 
                 if(gameTime == 30 || gameTime == 20 || gameTime == 10 || gameTime == 50) {
                     TextComponent textComponent = new TextComponent(ColorUtil.translate("&6[Event] &f" + host.getPlayer().getName() + " &7is hosting a &fSkywars Event! &a[Click to join]"));
-                    textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/skywars join"));
+                    textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/event join"));
                     Bukkit.broadcastMessage(ColorUtil.translate("&7"));
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         player.spigot().sendMessage(textComponent);
@@ -168,33 +168,34 @@ public class Skywars extends Event {
                 break;
             }
             case END: {
-                KitPvP.INSTANCE.getEventManager().deleteEvent();
-                /*
-                 * Having to do this since if someone dies we don't want a concurrent exception.
-                 */
-                for (PlayerData players : getSpectators()) {
-                    removePlayer(players);
-                }
-
-                for (Block block : blockPlaceLocations) {
-                    Block b = block.getLocation().getBlock();
-                    b.setType(Material.AIR);
-                }
-
-                for (Map.Entry<Location, Material> entry : blockBreakLocations.entrySet()) {
-                    Block b = entry.getKey().getBlock();
-                    b.setType(entry.getValue());
-                    Bukkit.broadcastMessage(b.getType().toString());
-                }
-
-                blockPlaceLocations.clear();
-                blockBreakLocations.clear();
-                List<Entity> entList = map.getSpectatorLocation().getWorld().getEntities();
-
-                for (Entity current : entList) {
-                    if (current instanceof Item) {
-                        current.remove();
+                if(players.isEmpty() && spectators.isEmpty()) {
+                    /*
+                     *  Placing back all the blocks
+                     */
+                    for (Block block : blockPlaceLocations) {
+                        Block b = block.getLocation().getBlock();
+                        b.setType(Material.AIR);
                     }
+
+                    for (Map.Entry<Location, Material> entry : blockBreakLocations.entrySet()) {
+                        Block b = entry.getKey().getBlock();
+                        b.setType(entry.getValue());
+                    }
+
+                    blockPlaceLocations.clear();
+                    blockBreakLocations.clear();
+                    List<Entity> entList = map.getSpectatorLocation().getWorld().getEntities();
+
+                    for (Entity current : entList) {
+                        if (current instanceof Item) {
+                            current.remove();
+                        }
+                    }
+
+                    KitPvP.INSTANCE.getEventManager().deleteEvent();
+                } else {
+                    if(!players.isEmpty()) removePlayer(players.get(0));
+                    if(!spectators.isEmpty()) removePlayer(spectators.get(0));
                 }
 
                 break;
